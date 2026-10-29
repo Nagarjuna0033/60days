@@ -4,6 +4,14 @@
 <meta charset="utf-8">
 <meta name="viewport" content="width=device-width,initial-scale=1,viewport-fit=cover">
 <title>60 Day Prep</title>
+<meta name="theme-color" content="#ffffff">
+<script>
+(function () {
+  var t = null; try { t = localStorage.getItem("sdp-theme"); } catch (e) {}
+  if (t !== "light" && t !== "dark") t = matchMedia("(prefers-color-scheme: dark)").matches ? "dark" : "light";
+  document.documentElement.dataset.theme = t;
+})();
+</script>
 <link rel="preconnect" href="https://fonts.googleapis.com">
 <link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Plus+Jakarta+Sans:wght@400;500;600;700;800&family=JetBrains+Mono:wght@400;500&display=swap">
 <style>
@@ -12,9 +20,16 @@
   --bg: #f5f8fc; --card: #ffffff; --line: #e2e8f0; --line-2: #eef2f7; --fg: #0f1d33; --muted: #64748b; --faint: #94a3b8;
   --blue: #2563eb; --blue-soft: #dbeafe; --blue-ink: #1e40af;
   --easy: #15803d; --easy-bg: #dcfce7; --med: #b45309; --med-bg: #fef3c7; --hard: #b91c1c; --hard-bg: #fee2e2;
-  --fire: #ea580c; --code-bg: #f8fafc;
+  --fire: #ea580c; --code-bg: #f8fafc; --strong: #cbd5e1; --foot-bg: #fafcff; --on-easy: #fff; --shadow: rgba(15, 29, 51, .12);
   --sans: "Plus Jakarta Sans", system-ui, -apple-system, "Segoe UI", sans-serif;
   --mono: "JetBrains Mono", ui-monospace, SFMono-Regular, Menlo, monospace;
+}
+:root[data-theme="dark"] {
+  color-scheme: dark;
+  --bg: #0b1220; --card: #121b2e; --line: #243149; --line-2: #1b2640; --fg: #e6edf7; --muted: #9aa8bd; --faint: #6b7a92;
+  --blue: #3b82f6; --blue-soft: #1c3253; --blue-ink: #bfdbfe;
+  --easy: #4ade80; --easy-bg: #11331f; --med: #fbbf24; --med-bg: #3a2b0c; --hard: #f87171; --hard-bg: #3d1616;
+  --fire: #fb923c; --code-bg: #0e1626; --strong: #3a4a66; --foot-bg: #0f182a; --on-easy: #0b1220; --shadow: rgba(0, 0, 0, .45);
 }
 * { box-sizing: border-box; }
 body { margin: 0; background: var(--bg); color: var(--fg); font: 15px/1.6 var(--sans); }
@@ -34,7 +49,7 @@ header { position: sticky; top: env(safe-area-inset-top, 0px); z-index: 5; backg
 .av { width: 30px; height: 30px; border-radius: 50%; flex-shrink: 0; display: grid; place-items: center; font-size: 12px; font-weight: 700; color: #fff; text-transform: uppercase; }
 .me-btn { border: 0; padding: 0; background: none; border-radius: 50%; }
 .menu-wrap { position: relative; }
-.menu { position: absolute; right: 0; top: 40px; min-width: 190px; background: var(--card); border: 1px solid var(--line); border-radius: 12px; box-shadow: 0 10px 30px rgba(15, 29, 51, .12); padding: 6px; z-index: 20; }
+.menu { position: absolute; right: 0; top: 40px; min-width: 190px; background: var(--card); border: 1px solid var(--line); border-radius: 12px; box-shadow: 0 10px 30px var(--shadow); padding: 6px; z-index: 20; }
 .menu .who { padding: 8px 10px 6px; font-weight: 700; color: var(--fg); border-bottom: 1px solid var(--line-2); margin-bottom: 4px; }
 .menu button { display: block; width: 100%; text-align: left; border: 0; background: none; padding: 8px 10px; border-radius: 8px; font-size: 14px; }
 .menu button:hover { background: var(--bg); }
@@ -67,11 +82,11 @@ h1 small { color: var(--faint); font-size: 18px; font-weight: 700; }
 .prob { padding: 14px 18px; border-bottom: 1px solid var(--line-2); }
 .prob:last-of-type { border-bottom: 0; }
 .prow { display: grid; grid-template-columns: 40px 28px minmax(0, 1fr) auto; gap: 10px; align-items: center; }
-.tick { width: 34px; height: 34px; border-radius: 50%; border: 2px solid #cbd5e1; background: var(--card); display: grid; place-items: center; padding: 0; transition: background .15s, border-color .15s; }
+.tick { width: 34px; height: 34px; border-radius: 50%; border: 2px solid var(--strong); background: var(--card); display: grid; place-items: center; padding: 0; transition: background .15s, border-color .15s; }
 .tick svg { width: 18px; height: 18px; stroke: transparent; }
-.tick:hover svg { stroke: #cbd5e1; }
+.tick:hover svg { stroke: var(--strong); }
 .tick.on { background: var(--easy); border-color: var(--easy); }
-.tick.on svg { stroke: #fff; }
+.tick.on svg { stroke: var(--on-easy); }
 .pos { font-size: 20px; text-align: center; }
 .ptitle { display: flex; align-items: baseline; gap: 8px; flex-wrap: wrap; min-width: 0; }
 .ptitle a { font-weight: 700; font-size: 16px; color: var(--fg); text-decoration: none; }
@@ -85,7 +100,7 @@ h1 small { color: var(--faint); font-size: 18px; font-weight: 700; }
 .hint { margin: 6px 0 0; color: var(--muted); font-size: 14px; }
 .links { display: flex; gap: 8px; margin-top: 8px; flex-wrap: wrap; }
 .pill-btn { border: 1px solid var(--line); background: var(--card); border-radius: 999px; padding: 4px 12px; font-size: 13px; font-weight: 600; color: var(--muted); }
-.pill-btn:hover { border-color: #cbd5e1; color: var(--fg); }
+.pill-btn:hover { border-color: var(--strong); color: var(--fg); }
 .pill-btn[aria-expanded="true"] { background: var(--blue-soft); border-color: transparent; color: var(--blue-ink); }
 .sub { margin-top: 12px; padding: 14px 16px; border-radius: 12px; background: var(--bg); border: 1px solid var(--line-2); }
 .sub p { margin: 0 0 8px; }
@@ -107,13 +122,13 @@ pre { margin: 10px 0; padding: 12px 14px; background: var(--card); border: 1px s
 .btn.ghost { background: var(--card); color: var(--fg); border: 1px solid var(--line); }
 .btn.danger { background: var(--card); color: var(--hard); border: 1px solid var(--hard-bg); }
 .btn.sm { padding: 5px 10px; font-size: 13px; }
-.foot { padding: 12px 18px; font-size: 13px; color: var(--muted); border-top: 1px solid var(--line-2); background: #fafcff; border-radius: 0 0 16px 16px; }
+.foot { padding: 12px 18px; font-size: 13px; color: var(--muted); border-top: 1px solid var(--line-2); background: var(--foot-bg); border-radius: 0 0 16px 16px; }
 .side { padding: 16px 18px; }
 .side h2 { font-size: 16px; font-weight: 700; margin: 0 0 8px; }
 .lb-row { display: grid; grid-template-columns: 22px 30px minmax(0, 1fr) auto auto; gap: 10px; align-items: center; padding: 9px 0; border-top: 1px solid var(--line-2); font-size: 14px; font-variant-numeric: tabular-nums; }
 .lb-row:first-of-type { border-top: 0; }
 .lb-row .rk { font-weight: 700; color: var(--faint); text-align: center; }
-.lb-row:nth-of-type(1) .rk { color: #ca8a04; } .lb-row:nth-of-type(2) .rk { color: #64748b; } .lb-row:nth-of-type(3) .rk { color: #b45309; }
+.lb-row:nth-of-type(1) .rk { color: #ca8a04; } .lb-row:nth-of-type(2) .rk { color: var(--muted); } .lb-row:nth-of-type(3) .rk { color: #b45309; }
 .lb-row .nm { overflow: hidden; text-overflow: ellipsis; white-space: nowrap; font-weight: 600; }
 .lb-row .st { font-size: 13px; color: var(--fire); font-weight: 700; }
 .lb-row .tot { font-weight: 800; min-width: 28px; text-align: right; }
@@ -128,6 +143,9 @@ pre { margin: 10px 0; padding: 12px 14px; background: var(--card); border: 1px s
 .rules { margin: 0; padding-left: 18px; font-size: 14px; color: var(--muted); }
 .rules li { margin: 4px 0; }
 .empty { font-size: 14px; color: var(--faint); margin: 0; }
+.theme-btn { width: 32px; height: 32px; border-radius: 50%; border: 1px solid var(--line); background: var(--card); display: grid; place-items: center; padding: 0; font-size: 15px; line-height: 1; }
+.theme-btn:hover { border-color: var(--strong); }
+.login-theme { position: fixed; top: calc(12px + env(safe-area-inset-top, 0px)); right: max(16px, env(safe-area-inset-right, 0px)); }
 .login { min-height: 100vh; display: grid; place-items: center; padding: 24px 16px; }
 .login .card { width: 100%; max-width: 360px; padding: 28px 24px; }
 .login .brand { font-size: 24px; margin-bottom: 4px; }
@@ -160,6 +178,7 @@ dialog::backdrop { background: rgba(15, 29, 51, .35); }
 <body>
 
 <div class="login" id="loginView" hidden>
+  <button class="theme-btn login-theme" data-theme-toggle></button>
   <form class="card" id="loginForm" autocomplete="on">
     <div class="brand">60 Day <span>Prep</span></div>
     <p id="lSub">Log in with your name and 4-digit PIN.</p>
@@ -180,6 +199,7 @@ dialog::backdrop { background: rgba(15, 29, 51, .35); }
       <div class="hmeta">
         <span class="hdate" id="hDate"></span>
         <span class="clock" id="hNext" title="Time until the next day opens"></span>
+        <button class="theme-btn" data-theme-toggle></button>
         <div class="menu-wrap">
           <button class="me-btn" id="meBtn" aria-haspopup="true" aria-expanded="false" aria-label="Account menu"></button>
           <div class="menu" id="menu" hidden>
@@ -262,6 +282,25 @@ const WEEKS = [
   [43, 50, "Backtracking, 1D and 2D DP"], [51, 56, "Advanced DP, tries, design"], [57, 60, "🏆 Final boss"],
 ];
 const COLORS = ["#2563eb", "#ea580c", "#15803d", "#9333ea", "#db2777", "#0891b2", "#b45309", "#4f46e5"];
+
+function savedTheme() { try { const t = localStorage.getItem("sdp-theme"); return t === "light" || t === "dark" ? t : null; } catch { return null; } }
+const darkQuery = matchMedia("(prefers-color-scheme: dark)");
+function applyTheme(t) {
+  document.documentElement.dataset.theme = t;
+  document.querySelector('meta[name="theme-color"]').content = t === "dark" ? "#121b2e" : "#ffffff";
+  document.querySelectorAll("[data-theme-toggle]").forEach(b => {
+    b.textContent = t === "dark" ? "☀️" : "🌙";
+    b.setAttribute("aria-label", t === "dark" ? "Switch to light mode" : "Switch to dark mode");
+    b.title = b.getAttribute("aria-label");
+  });
+}
+applyTheme(document.documentElement.dataset.theme);
+document.querySelectorAll("[data-theme-toggle]").forEach(b => b.addEventListener("click", () => {
+  const t = document.documentElement.dataset.theme === "dark" ? "light" : "dark";
+  try { localStorage.setItem("sdp-theme", t); } catch {}
+  applyTheme(t);
+}));
+darkQuery.addEventListener("change", e => { if (!savedTheme()) applyTheme(e.matches ? "dark" : "light"); });
 
 let BANK = [];
 const S = { cur: 1, sel: 1, me: null, uid: null, users: {}, solves: {}, mine: {}, sols: {}, comments: {}, open: {}, drafts: {}, writing: Promise.resolve(), pendingSolves: 0 };
