@@ -84,16 +84,17 @@ h1 small { color: var(--faint); font-size: 18px; font-weight: 700; }
 .prow { display: grid; grid-template-columns: 40px 28px minmax(0, 1fr) auto; gap: 10px; align-items: center; }
 .tick { width: 34px; height: 34px; border-radius: 50%; border: 2px solid var(--strong); background: var(--card); display: grid; place-items: center; padding: 0; transition: background .15s, border-color .15s; }
 .tick svg { width: 18px; height: 18px; stroke: transparent; }
-.tick:hover svg { stroke: var(--strong); }
 .tick.on { background: var(--easy); border-color: var(--easy); }
 .tick.on svg { stroke: var(--on-easy); }
+.lc-cta { display: flex; align-items: center; justify-content: space-between; gap: 12px; flex-wrap: wrap; padding: 12px 18px; background: var(--blue-soft); color: var(--blue-ink); font-size: 14px; border-bottom: 1px solid var(--line-2); }
+.lc-cta .btn { padding: 6px 12px; font-size: 13px; }
+.list-head .right { display: flex; align-items: center; gap: 10px; }
 .pos { font-size: 20px; text-align: center; }
 .ptitle { display: flex; align-items: baseline; gap: 8px; flex-wrap: wrap; min-width: 0; }
 .ptitle a { font-weight: 700; font-size: 16px; color: var(--fg); text-decoration: none; }
 .ptitle a:hover { color: var(--blue); text-decoration: underline; }
 .prob.solved .ptitle a { color: var(--faint); text-decoration: line-through; }
 .lc { font: 12px var(--mono); color: var(--faint); }
-.via { font-size: 11px; font-weight: 700; color: var(--easy); background: var(--easy-bg); padding: 1px 8px; border-radius: 999px; white-space: nowrap; }
 .lb-row .nm a.lcl { display: block; font: 500 12px var(--mono); color: var(--faint); text-decoration: none; overflow: hidden; text-overflow: ellipsis; }
 .lb-row .nm a.lcl:hover { color: var(--blue); }
 .mem .nm a.lcl { font: 500 12px var(--mono); color: var(--faint); margin-left: 6px; }
@@ -241,7 +242,7 @@ dialog::backdrop { background: rgba(15, 29, 51, .35); }
         <section class="card side">
           <h2>House rules</h2>
           <ol class="rules">
-            <li>Tick 🚶 🏃 🚀 as you solve each problem</li>
+            <li>Solve 🚶 🏃 🚀 on LeetCode. Accepted submissions tick here automatically</li>
             <li>Try for 30 minutes before opening the hint or solution</li>
             <li>Discussion opens once you solve a problem, so no spoilers</li>
             <li>Missed a day? Catch up, don't skip</li>
@@ -316,7 +317,7 @@ document.querySelectorAll("[data-theme-toggle]").forEach(b => b.addEventListener
 darkQuery.addEventListener("change", e => { if (!savedTheme()) applyTheme(e.matches ? "dark" : "light"); });
 
 let BANK = [];
-const S = { cur: 1, sel: 1, me: null, uid: null, users: {}, solves: {}, mine: {}, sols: {}, comments: {}, open: {}, drafts: {}, writing: Promise.resolve(), pendingSolves: 0 };
+const S = { cur: 1, sel: 1, me: null, uid: null, users: {}, solves: {}, mine: {}, sols: {}, comments: {}, open: {}, drafts: {} };
 
 const $ = id => document.getElementById(id);
 function currentDay() { return Math.min(60, Math.max(1, Math.floor((Date.now() - START) / DAYMS) + 1)); }
@@ -397,16 +398,20 @@ function renderStrip() {
 function renderDay() {
   const d = BANK[S.sel - 1], box = $("day"), solved = mySolved(d.day);
   const focused = document.activeElement && document.activeElement.id;
-  box.replaceChildren(el("div", { class: "list-head" }, el("h2", {}, d.day === S.cur ? "Today's problems" : `Day ${d.day} problems`), el("span", {}, `${solved.filter(Boolean).length} of 3 solved`)));
+  const linked = !!S.me.leetcode;
+  box.replaceChildren(el("div", { class: "list-head" }, el("h2", {}, d.day === S.cur ? "Today's problems" : `Day ${d.day} problems`),
+    el("div", { class: "right" }, el("span", {}, `${solved.filter(Boolean).length} of 3 solved`),
+      linked ? el("button", { class: "pill-btn", id: "daySync", onclick: quickSync }, "↻ Sync") : null)));
+  if (!linked) box.append(el("div", { class: "lc-cta" }, el("span", {}, "Link your LeetCode account. Problems you get Accepted there tick here automatically."),
+    el("button", { class: "btn", onclick: openLc }, "Link LeetCode")));
   const sol = S.sols[d.day];
   d.problems.forEach((p, i) => {
     const on = !!solved[i], key = d.day + ":" + i;
-    const tick = el("button", { class: "tick" + (on ? " on" : ""), "aria-pressed": on ? "true" : "false", "aria-label": `Mark ${p.title} ${on ? "unsolved" : "solved"}`, onclick: () => toggle(d.day, i) });
+    const tick = el("span", { class: "tick" + (on ? " on" : ""), role: "img", "aria-label": on ? "Solved on LeetCode" : "Not solved yet", title: on ? "Solved on LeetCode" : "Solve it on LeetCode to tick" });
     tick.innerHTML = CHECK;
     const cs = S.comments[key] || [];
     const row = el("div", { class: "prow" }, tick, el("div", { class: "pos", "aria-hidden": "true" }, POS[i]),
-      el("div", { class: "ptitle" }, el("a", { href: p.url, target: "_blank", rel: "noopener" }, p.title), el("span", { class: "lc" }, "LC " + p.number),
-        on && (S.auto[d.day] || [])[i] ? el("span", { class: "via", title: "Ticked automatically from your accepted LeetCode submission" }, "via LeetCode") : null),
+      el("div", { class: "ptitle" }, el("a", { href: p.url, target: "_blank", rel: "noopener" }, p.title), el("span", { class: "lc" }, "LC " + p.number)),
       el("span", { class: "diff d-" + p.difficulty }, `${DIFF[p.difficulty]} ${p.difficulty}`));
     const body = el("div", { class: "pbody" });
     body.append(el("div", { class: "links" },
@@ -453,7 +458,7 @@ function discussionView(key, solved, cs) {
 
 function renderLeaderboard() {
   const rows = board();
-  if (!rows.length) { $("lb").replaceChildren(el("p", { class: "empty" }, "Tick a problem to get on the board.")); return; }
+  if (!rows.length) { $("lb").replaceChildren(el("p", { class: "empty" }, "Solve a problem on LeetCode to get on the board.")); return; }
   $("lb").replaceChildren(...rows.map((r, i) => el("div", { class: "lb-row" + (r.id === S.uid ? " mine" : "") },
     el("span", { class: "rk" }, i + 1), avatar(r.id, nameOf(r.id)),
     el("span", { class: "nm" }, nameOf(r.id) + (r.id === S.uid ? " (you)" : ""), lcLink(r.id)),
@@ -477,8 +482,7 @@ function render() { renderClock(); renderHero(); renderStats(); renderStrip(); r
 function applyState(st) {
   S.me = st.me; S.uid = String(st.me.id); S.users = st.users;
   S.sols = { ...S.fileSols, ...st.solutions };
-  if (!S.pendingSolves) S.mine = st.solves[S.uid] || {};
-  S.auto = (st.auto || {})[S.uid] || {};
+  S.mine = st.solves[S.uid] || {};
   S.lc = st.leetcode || {};
   S.solves = { ...st.solves, [S.uid]: S.mine };
   const m = {};
@@ -493,14 +497,10 @@ async function refresh() {
   } catch (e) { if (e.status !== 401) console.warn(e); }
 }
 
-function queueWrite(fn) { S.writing = S.writing.then(fn).catch(e => { if (e.status !== 401) alert(e.message); }); return S.writing; }
-
-function toggle(day, i) {
-  const arr = [...mySolved(day)]; arr[i] = !arr[i];
-  S.mine = { ...S.mine, [day]: arr }; S.solves = { ...S.solves, [S.uid]: S.mine };
-  render();
-  S.pendingSolves++;
-  queueWrite(() => api("/api/solves", { method: "PUT", body: { day, idx: i, value: arr[i] } })).finally(() => { S.pendingSolves--; });
+async function quickSync() {
+  const b = $("daySync"); if (b) { b.disabled = true; b.textContent = "Syncing…"; }
+  try { const r = await api("/api/me/leetcode/sync", { method: "POST" }); await refresh(); if (!r.added) alert(addedText(0)); }
+  catch (e) { if (e.status !== 401) { alert(e.message); renderDay(); } }
 }
 
 async function postComment(key) {
@@ -628,7 +628,7 @@ function renderLc() {
   box.replaceChildren(
     el("div", { class: "lc-linked" }, el("span", { class: "note" }, "Linked to"), el("a", { href: lcUrl(name), target: "_blank", rel: "noopener" }, "@" + name)),
     el("p", { class: "note", style: "margin-top:8px" }, S.me.lc_status === "error" ? "Couldn't reach LeetCode on the last try. It will retry automatically." : last ? `Last synced ${ago(last)}. Checks every 10 minutes.` : "Not synced yet. Checks every 10 minutes."),
-    el("p", { class: "note", style: "margin-top:8px" }, "Auto-sync only adds ticks. Untick anything by hand and it stays unticked."),
+
     el("div", { class: "lc-acts" },
       el("button", { class: "btn", id: "lcSync", onclick: syncLc }, "Sync now"),
       el("button", { class: "btn ghost", onclick: unlinkLc }, "Unlink")),
@@ -658,10 +658,11 @@ async function unlinkLc() {
   catch (err) { lcMsg(err.message); }
 }
 
-$("mLc").addEventListener("click", async () => {
+async function openLc() {
   closeMenu(); renderLc(); $("lcDlg").showModal();
   try { await reloadMe(); renderLc(); } catch {}
-});
+}
+$("mLc").addEventListener("click", openLc);
 
 $("mMembers").addEventListener("click", async () => {
   closeMenu(); memMsg(""); $("memDlg").showModal();

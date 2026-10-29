@@ -1,6 +1,6 @@
 import crypto from "node:crypto";
 import { q, dbUrl, dbEnvNames } from "../lib/db.js";
-import { findLeetcodeUser, syncUser, setCell, validLeetcodeName } from "../lib/leetcode.js";
+import { findLeetcodeUser, syncUser, validLeetcodeName } from "../lib/leetcode.js";
 import { currentUser, login, sessionCookie, clearCookie, ensureAdmin, hashPin, nameKey, validPin } from "../lib/auth.js";
 
 const TOTAL_DAYS = 60;
@@ -22,15 +22,6 @@ async function readBody(req) {
 }
 
 const validDay = (d) => Number.isInteger(d) && d >= 1 && d <= TOTAL_DAYS;
-
-function cleanDays(days) {
-  const out = {};
-  for (const [k, v] of Object.entries(days || {})) {
-    const d = Number(k);
-    if (validDay(d) && Array.isArray(v)) out[d] = [0, 1, 2].map(i => v[i] === true);
-  }
-  return out;
-}
 
 function tokenOk(req) {
   const want = process.env.SOLUTIONS_TOKEN;
@@ -93,7 +84,7 @@ async function handle(req, res) {
   if (path === "/api/state" && method === "GET") {
     const [users, solves, sols, comments] = await Promise.all([
       q("SELECT id, name, leetcode FROM users ORDER BY id"),
-      q("SELECT user_id, days, auto FROM solves"),
+      q("SELECT user_id, auto FROM solves"),
       q("SELECT day, data FROM solutions"),
       q("SELECT id, user_id, d, p, t, at FROM comments ORDER BY at"),
     ]);
@@ -101,23 +92,14 @@ async function handle(req, res) {
       me,
       users: Object.fromEntries(users.map(u => [u.id, u.name])),
       leetcode: Object.fromEntries(users.filter(u => u.leetcode).map(u => [u.id, u.leetcode])),
-      solves: Object.fromEntries(solves.map(s => [s.user_id, s.days])),
-      auto: Object.fromEntries(solves.map(s => [s.user_id, s.auto || {}])),
+      solves: Object.fromEntries(solves.map(s => [s.user_id, s.auto || {}])),
       solutions: Object.fromEntries(sols.map(s => [s.day, s.data])),
       comments,
     });
   }
 
   if (path === "/api/solves" && method === "PUT") {
-    const body = await readBody(req);
-    if (body.day !== undefined) {
-      if (!validDay(body.day) || ![0, 1, 2].includes(body.idx)) return send(res, 400, { error: "Bad tick." });
-      await setCell("days", me.id, body.day, body.idx, body.value === true);
-      return send(res, 200, { ok: true });
-    }
-    const clean = cleanDays(body.days);
-    await q("INSERT INTO solves (user_id, days) VALUES ($1, $2) ON CONFLICT (user_id) DO UPDATE SET days = $2", [me.id, JSON.stringify(clean)]);
-    return send(res, 200, { ok: true });
+    return send(res, 403, { error: "Ticks come from LeetCode now. Solve it there and press Sync now." });
   }
 
   if (path === "/api/comments" && method === "POST") {
