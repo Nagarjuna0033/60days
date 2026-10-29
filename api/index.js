@@ -1,5 +1,5 @@
 import crypto from "node:crypto";
-import { q } from "../lib/db.js";
+import { q, dbUrl, dbEnvNames } from "../lib/db.js";
 import { currentUser, login, sessionCookie, clearCookie, ensureAdmin, hashPin, nameKey, validPin } from "../lib/auth.js";
 
 const TOTAL_DAYS = 60;
@@ -41,6 +41,8 @@ async function handle(req, res) {
   const url = new URL(req.url, "http://x");
   const path = url.pathname.replace(/\/+$/, "");
   const method = req.method;
+
+  if (path === "/api/health") return send(res, 200, { db: !!dbUrl(), envNames: dbEnvNames(), commit: (process.env.VERCEL_GIT_COMMIT_SHA || "").slice(0, 7), env: process.env.VERCEL_ENV || "local" });
 
   await ensureAdmin();
 
