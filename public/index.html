@@ -418,7 +418,7 @@ function render() { renderClock(); renderHero(); renderStats(); renderStrip(); r
 
 function applyState(st) {
   S.me = st.me; S.uid = String(st.me.id); S.users = st.users;
-  S.sols = st.solutions;
+  S.sols = { ...S.fileSols, ...st.solutions };
   if (!S.pendingSolves) S.mine = st.solves[S.uid] || {};
   S.solves = { ...st.solves, [S.uid]: S.mine };
   const m = {};
@@ -427,7 +427,10 @@ function applyState(st) {
 }
 
 async function refresh() {
-  try { applyState(await api("/api/state")); render(); } catch (e) { if (e.status !== 401) console.warn(e); }
+  try {
+    const [st, sols] = await Promise.all([api("/api/state"), fetch("/solutions.json", { cache: "no-cache" }).then(r => r.ok ? r.json() : {}).catch(() => ({}))]);
+    S.fileSols = sols; applyState(st); render();
+  } catch (e) { if (e.status !== 401) console.warn(e); }
 }
 
 function queueWrite(fn) { S.writing = S.writing.then(fn).catch(e => { if (e.status !== 401) alert(e.message); }); return S.writing; }
