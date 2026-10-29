@@ -418,10 +418,10 @@ function renderDay() {
       el("span", { class: "diff d-" + p.difficulty }, `${DIFF[p.difficulty]} ${p.difficulty}`));
     const body = el("div", { class: "pbody" });
     body.append(el("div", { class: "links" },
-      el("button", { class: "pill-btn", "aria-expanded": S.open[key] === "hint" ? "true" : "false", onclick: () => { S.open[key] = S.open[key] === "hint" ? null : "hint"; renderDay(); } }, S.open[key] === "hint" ? "Hide hint" : "💡 Show hint"),
+      preview ? null : el("button", { class: "pill-btn", "aria-expanded": S.open[key] === "hint" ? "true" : "false", onclick: () => { S.open[key] = S.open[key] === "hint" ? null : "hint"; renderDay(); } }, S.open[key] === "hint" ? "Hide hint" : "💡 Show hint"),
       preview ? null : el("button", { class: "pill-btn", "aria-expanded": S.open[key] === "sol" ? "true" : "false", onclick: () => { S.open[key] = S.open[key] === "sol" ? null : "sol"; renderDay(); } }, sol ? "Solution" : "Solution 🔒"),
       preview ? null : el("button", { class: "pill-btn", "aria-expanded": S.open[key] === "dis" ? "true" : "false", onclick: () => { S.open[key] = S.open[key] === "dis" ? null : "dis"; renderDay(); } }, `Discussion · ${cs.length}`)));
-    if (S.open[key] === "hint") body.append(el("div", { class: "sub" }, el("p", { class: "hint", style: "margin:0" }, "💡 " + p.hint)));
+    if (!preview && S.open[key] === "hint") body.append(el("div", { class: "sub" }, el("p", { class: "hint", style: "margin:0" }, "💡 " + p.hint)));
     if (!preview && S.open[key] === "sol") body.append(solutionView(sol, i, d.day));
     if (!preview && S.open[key] === "dis") body.append(discussionView(key, on, cs));
     box.append(el("div", { class: "prob" + (on ? " solved" : "") }, row, body));
