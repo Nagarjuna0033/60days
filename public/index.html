@@ -359,6 +359,15 @@ function board() {
     .sort((a, b) => b.total - a.total || b.st - a.st);
 }
 
+const opensAt = day => START + (day - 1) * DAYMS;
+function istDate(t) { return new Date(t).toLocaleDateString("en-CA", { timeZone: "Asia/Kolkata" }); }
+function whenAt6(t) {
+  const day = istDate(t);
+  if (day === istDate(Date.now())) return "today at 6 AM";
+  if (day === istDate(Date.now() + DAYMS)) return "tomorrow at 6 AM";
+  return new Date(t).toLocaleDateString("en-IN", { weekday: "short", day: "numeric", month: "short", timeZone: "Asia/Kolkata" }) + ", 6 AM";
+}
+
 function renderClock() {
   const next = Math.max(0, START + S.cur * DAYMS - Date.now());
   const h = Math.floor(next / 36e5), m = Math.floor(next % 36e5 / 6e4), s = Math.floor(next % 6e4 / 1e3);
@@ -390,7 +399,7 @@ function renderStrip() {
   for (const d of BANK) {
     const n = mySolved(d.day).filter(Boolean).length, lock = d.day > S.cur + 1, preview = d.day === S.cur + 1;
     const cls = ["chip", lock ? "lock" : preview ? "preview" : n === 3 ? "done" : n ? "part" : "", d.day === S.sel ? "sel" : "", d.day === S.cur ? "today" : ""].join(" ");
-    strip.append(el("button", { class: cls, "aria-label": `Day ${d.day}${lock ? ", locked" : preview ? ", preview" : ""}`, title: preview ? "Preview of tomorrow's problems" : null, "aria-current": d.day === S.sel ? "true" : null, disabled: lock,
+    strip.append(el("button", { class: cls, "aria-label": `Day ${d.day}${lock ? ", locked" : preview ? ", preview" : ""}`, title: preview ? "Preview of the next day's problems" : null, "aria-current": d.day === S.sel ? "true" : null, disabled: lock,
       onclick: () => { S.sel = d.day; render(); } }, d.day));
   }
   const s = strip.querySelector(".sel");
@@ -402,9 +411,9 @@ function renderDay() {
   const focused = document.activeElement && document.activeElement.id;
   const linked = !!S.me.leetcode, preview = d.day > S.cur;
   box.replaceChildren(el("div", { class: "list-head" }, el("h2", {}, d.day === S.cur ? "Today's problems" : preview ? `Day ${d.day} preview` : `Day ${d.day} problems`),
-    preview ? el("span", {}, "👀 Coming tomorrow") : el("div", { class: "right" }, el("span", {}, `${solved.filter(Boolean).length} of 3 solved`),
+    preview ? el("span", {}, `👀 Opens ${whenAt6(opensAt(d.day))}`) : el("div", { class: "right" }, el("span", {}, `${solved.filter(Boolean).length} of 3 solved`),
       linked ? el("button", { class: "pill-btn", id: "daySync", onclick: quickSync }, "↻ Sync") : null)));
-  if (preview) box.append(el("div", { class: "preview-note" }, "Sneak peek only. This day opens tomorrow at 6 AM. LeetCode submissions made before then won't count, so solve it after it opens."));
+  if (preview) box.append(el("div", { class: "preview-note" }, `Sneak peek only. This day opens ${whenAt6(opensAt(d.day))}. LeetCode submissions made before then won't count, so solve it after it opens.`));
   else if (!linked) box.append(el("div", { class: "lc-cta" }, el("span", {}, "Link your LeetCode account. Problems you get Accepted there tick here automatically."),
     el("button", { class: "btn", onclick: openLc }, "Link LeetCode")));
   const sol = S.sols[d.day];
@@ -426,13 +435,13 @@ function renderDay() {
     if (!preview && S.open[key] === "dis") body.append(discussionView(key, on, cs));
     box.append(el("div", { class: "prob" + (on ? " solved" : "") }, row, body));
   });
-  box.append(el("div", { class: "foot" }, preview ? "Opens tomorrow at 6 AM. Ticks start counting then." : sol ? "Solutions are out for this day." : d.day === S.cur ? "Solutions unlock tomorrow at 6 AM." : "Solutions are on their way."));
+  box.append(el("div", { class: "foot" }, preview ? `Opens ${whenAt6(opensAt(d.day))}. Ticks start counting then.` : sol ? "Solutions are out for this day." : d.day === S.cur ? `Solutions unlock ${whenAt6(opensAt(d.day + 1))}.` : "Solutions are on their way."));
   if (focused && focused.startsWith("c-")) { const ta = $(focused); if (ta) { ta.focus(); ta.selectionStart = ta.selectionEnd = ta.value.length; } }
 }
 
 function solutionView(sol, i, day) {
   const it = sol && sol.items && sol.items[i];
-  if (!it) return el("div", { class: "sub" }, el("p", { class: "note" }, day === S.cur ? "Unlocks tomorrow at 6 AM. Give it your best shot first." : "Not posted yet."));
+  if (!it) return el("div", { class: "sub" }, el("p", { class: "note" }, day === S.cur ? `Unlocks ${whenAt6(opensAt(day + 1))}. Give it your best shot first.` : "Not posted yet."));
   return el("div", { class: "sub" },
     el("p", {}, el("span", { class: "k" }, "Approach"), it.approach || ""),
     el("p", {}, el("span", { class: "k" }, "Complexity"), `Time ${it.time || "?"} · Space ${it.space || "?"}`),
