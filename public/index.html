@@ -75,6 +75,8 @@ h1 small { color: var(--faint); font-size: 18px; font-weight: 700; }
 .chip.done { background: var(--blue); border-color: transparent; color: #fff; }
 .chip.sel { outline: 2px solid var(--fg); outline-offset: 1px; }
 .chip.lock { color: var(--faint); background: transparent; border-style: dashed; cursor: not-allowed; }
+.chip.preview { border-style: dashed; border-color: var(--blue); color: var(--blue-ink); background: transparent; }
+.preview-note { padding: 12px 18px; background: var(--med-bg); color: var(--med); font-size: 14px; border-bottom: 1px solid var(--line-2); }
 .chip.today::after { content: ""; position: absolute; bottom: 3px; width: 4px; height: 4px; border-radius: 50%; background: var(--fire); }
 .list-head { display: flex; justify-content: space-between; align-items: center; padding: 14px 18px; border-bottom: 1px solid var(--line-2); gap: 12px; flex-wrap: wrap; }
 .list-head h2 { margin: 0; font-size: 16px; font-weight: 700; }
@@ -371,7 +373,7 @@ function renderHero() {
     el("div", { style: "min-width:0" },
       el("div", { class: "eyebrow" }, `Week ${Math.min(9, Math.ceil(d.day / 7))} · ${d.topic}`),
       el("h1", {}, `Day ${d.day} `, el("small", {}, "/ 60")),
-      el("div", { style: "font-size:13px;color:var(--muted);margin-top:2px" }, d.day === S.cur ? `Today · ${dateLabel(d.date)}` : dateLabel(d.date))),
+      el("div", { style: "font-size:13px;color:var(--muted);margin-top:2px" }, d.day === S.cur ? `Today · ${dateLabel(d.date)}` : d.day > S.cur ? `Preview · opens ${dateLabel(d.date)}, 6 AM` : dateLabel(d.date))),
     ring);
 }
 
@@ -386,9 +388,9 @@ function renderStats() {
 function renderStrip() {
   const strip = $("strip"); strip.replaceChildren();
   for (const d of BANK) {
-    const n = mySolved(d.day).filter(Boolean).length, lock = d.day > S.cur;
-    const cls = ["chip", lock ? "lock" : n === 3 ? "done" : n ? "part" : "", d.day === S.sel ? "sel" : "", d.day === S.cur ? "today" : ""].join(" ");
-    strip.append(el("button", { class: cls, "aria-label": `Day ${d.day}${lock ? ", locked" : ""}`, "aria-current": d.day === S.sel ? "true" : null, disabled: lock,
+    const n = mySolved(d.day).filter(Boolean).length, lock = d.day > S.cur + 1, preview = d.day === S.cur + 1;
+    const cls = ["chip", lock ? "lock" : preview ? "preview" : n === 3 ? "done" : n ? "part" : "", d.day === S.sel ? "sel" : "", d.day === S.cur ? "today" : ""].join(" ");
+    strip.append(el("button", { class: cls, "aria-label": `Day ${d.day}${lock ? ", locked" : preview ? ", preview" : ""}`, title: preview ? "Preview of tomorrow's problems" : null, "aria-current": d.day === S.sel ? "true" : null, disabled: lock,
       onclick: () => { S.sel = d.day; render(); } }, d.day));
   }
   const s = strip.querySelector(".sel");
@@ -398,11 +400,12 @@ function renderStrip() {
 function renderDay() {
   const d = BANK[S.sel - 1], box = $("day"), solved = mySolved(d.day);
   const focused = document.activeElement && document.activeElement.id;
-  const linked = !!S.me.leetcode;
-  box.replaceChildren(el("div", { class: "list-head" }, el("h2", {}, d.day === S.cur ? "Today's problems" : `Day ${d.day} problems`),
-    el("div", { class: "right" }, el("span", {}, `${solved.filter(Boolean).length} of 3 solved`),
+  const linked = !!S.me.leetcode, preview = d.day > S.cur;
+  box.replaceChildren(el("div", { class: "list-head" }, el("h2", {}, d.day === S.cur ? "Today's problems" : preview ? `Day ${d.day} preview` : `Day ${d.day} problems`),
+    preview ? el("span", {}, "👀 Coming tomorrow") : el("div", { class: "right" }, el("span", {}, `${solved.filter(Boolean).length} of 3 solved`),
       linked ? el("button", { class: "pill-btn", id: "daySync", onclick: quickSync }, "↻ Sync") : null)));
-  if (!linked) box.append(el("div", { class: "lc-cta" }, el("span", {}, "Link your LeetCode account. Problems you get Accepted there tick here automatically."),
+  if (preview) box.append(el("div", { class: "preview-note" }, "Sneak peek only. This day opens tomorrow at 6 AM. LeetCode submissions made before then won't count, so solve it after it opens."));
+  else if (!linked) box.append(el("div", { class: "lc-cta" }, el("span", {}, "Link your LeetCode account. Problems you get Accepted there tick here automatically."),
     el("button", { class: "btn", onclick: openLc }, "Link LeetCode")));
   const sol = S.sols[d.day];
   d.problems.forEach((p, i) => {
@@ -416,14 +419,14 @@ function renderDay() {
     const body = el("div", { class: "pbody" });
     body.append(el("div", { class: "links" },
       el("button", { class: "pill-btn", "aria-expanded": S.open[key] === "hint" ? "true" : "false", onclick: () => { S.open[key] = S.open[key] === "hint" ? null : "hint"; renderDay(); } }, S.open[key] === "hint" ? "Hide hint" : "💡 Show hint"),
-      el("button", { class: "pill-btn", "aria-expanded": S.open[key] === "sol" ? "true" : "false", onclick: () => { S.open[key] = S.open[key] === "sol" ? null : "sol"; renderDay(); } }, sol ? "Solution" : "Solution 🔒"),
-      el("button", { class: "pill-btn", "aria-expanded": S.open[key] === "dis" ? "true" : "false", onclick: () => { S.open[key] = S.open[key] === "dis" ? null : "dis"; renderDay(); } }, `Discussion · ${cs.length}`)));
+      preview ? null : el("button", { class: "pill-btn", "aria-expanded": S.open[key] === "sol" ? "true" : "false", onclick: () => { S.open[key] = S.open[key] === "sol" ? null : "sol"; renderDay(); } }, sol ? "Solution" : "Solution 🔒"),
+      preview ? null : el("button", { class: "pill-btn", "aria-expanded": S.open[key] === "dis" ? "true" : "false", onclick: () => { S.open[key] = S.open[key] === "dis" ? null : "dis"; renderDay(); } }, `Discussion · ${cs.length}`)));
     if (S.open[key] === "hint") body.append(el("div", { class: "sub" }, el("p", { class: "hint", style: "margin:0" }, "💡 " + p.hint)));
-    if (S.open[key] === "sol") body.append(solutionView(sol, i, d.day));
-    if (S.open[key] === "dis") body.append(discussionView(key, on, cs));
+    if (!preview && S.open[key] === "sol") body.append(solutionView(sol, i, d.day));
+    if (!preview && S.open[key] === "dis") body.append(discussionView(key, on, cs));
     box.append(el("div", { class: "prob" + (on ? " solved" : "") }, row, body));
   });
-  box.append(el("div", { class: "foot" }, sol ? "Solutions are out for this day." : d.day === S.cur ? "Solutions unlock tomorrow at 6 AM." : "Solutions are on their way."));
+  box.append(el("div", { class: "foot" }, preview ? "Opens tomorrow at 6 AM. Ticks start counting then." : sol ? "Solutions are out for this day." : d.day === S.cur ? "Solutions unlock tomorrow at 6 AM." : "Solutions are on their way."));
   if (focused && focused.startsWith("c-")) { const ta = $(focused); if (ta) { ta.focus(); ta.selectionStart = ta.selectionEnd = ta.value.length; } }
 }
 
