@@ -51,6 +51,19 @@ async function handle(req, res) {
     return send(res, 200, { user: r.user }, { "Set-Cookie": sessionCookie(r.user.id) });
   }
 
+  if (path === "/api/signup" && method === "POST") {
+    const { name, pin } = await readBody(req);
+    const clean = String(name || "").trim().replace(/\s+/g, " ").slice(0, 40);
+    if (!clean) return send(res, 400, { error: "Enter your name." });
+    if (!validPin(pin)) return send(res, 400, { error: "PIN must be 4 digits." });
+    const [exists] = await q("SELECT id FROM users WHERE name_key = $1", [nameKey(clean)]);
+    if (exists) return send(res, 409, { error: "That name is taken. Log in instead, or pick another name." });
+    const [row] = await q("INSERT INTO users (name, name_key, pin_hash, is_admin, created_at) VALUES ($1, $2, $3, FALSE, $4) ON CONFLICT (name_key) DO NOTHING RETURNING id",
+      [clean, nameKey(clean), await hashPin(pin), Date.now()]);
+    if (!row) return send(res, 409, { error: "That name is taken. Log in instead, or pick another name." });
+    return send(res, 200, { user: { id: row.id, name: clean, is_admin: false } }, { "Set-Cookie": sessionCookie(row.id) });
+  }
+
   if (path === "/api/logout" && method === "POST") return send(res, 200, { ok: true }, { "Set-Cookie": clearCookie() });
 
   const solMatch = path.match(/^\/api\/solutions\/(\d+)$/);

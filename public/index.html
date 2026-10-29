@@ -138,6 +138,9 @@ label { display: block; font-size: 13px; font-weight: 600; margin: 12px 0 6px; }
 .err { color: var(--hard); font-size: 13px; margin: 10px 0 0; min-height: 1em; }
 .ok { color: var(--easy); font-size: 13px; margin: 10px 0 0; }
 .login .btn { width: 100%; margin-top: 18px; padding: 11px; }
+.login .swap { margin: 16px 0 0; text-align: center; font-size: 14px; }
+.link { border: 0; background: none; padding: 0; color: var(--blue); font-weight: 700; }
+.link:hover { text-decoration: underline; }
 dialog { border: 1px solid var(--line); border-radius: 16px; padding: 0; width: min(440px, calc(100vw - 32px)); color: var(--fg); background: var(--card); }
 dialog::backdrop { background: rgba(15, 29, 51, .35); }
 .dlg-head { display: flex; justify-content: space-between; align-items: center; padding: 14px 18px; border-bottom: 1px solid var(--line-2); }
@@ -159,13 +162,14 @@ dialog::backdrop { background: rgba(15, 29, 51, .35); }
 <div class="login" id="loginView" hidden>
   <form class="card" id="loginForm" autocomplete="on">
     <div class="brand">60 Day <span>Prep</span></div>
-    <p>Log in with your name and 4-digit PIN.</p>
+    <p id="lSub">Log in with your name and 4-digit PIN.</p>
     <label for="lName">Name</label>
     <input class="field" id="lName" name="username" autocomplete="username" required>
     <label for="lPin">PIN</label>
     <input class="field pin" id="lPin" name="password" type="password" inputmode="numeric" pattern="\d{4}" maxlength="4" autocomplete="current-password" required>
     <p class="err" id="lErr" role="alert"></p>
     <button class="btn" type="submit" id="lBtn">Log in</button>
+    <p class="swap"><span id="lAsk">New here?</span> <button type="button" class="link" id="lSwap">Create account</button></p>
   </form>
 </div>
 
@@ -470,11 +474,23 @@ function startPolling() { stopPolling(); pollTimer = setInterval(() => { if (!do
 function stopPolling() { if (pollTimer) clearInterval(pollTimer); pollTimer = null; }
 document.addEventListener("visibilitychange", () => { if (!document.hidden && pollTimer) refresh(); });
 
+let signup = false;
+function setMode(on) {
+  signup = on;
+  $("lSub").textContent = on ? "Pick a name your friends will see and a 4-digit PIN." : "Log in with your name and 4-digit PIN.";
+  $("lBtn").textContent = on ? "Create account" : "Log in";
+  $("lAsk").textContent = on ? "Already joined?" : "New here?";
+  $("lSwap").textContent = on ? "Log in" : "Create account";
+  $("lPin").autocomplete = on ? "new-password" : "current-password";
+  $("lErr").textContent = "";
+}
+$("lSwap").addEventListener("click", () => { setMode(!signup); $("lName").focus(); });
+
 $("loginForm").addEventListener("submit", async e => {
   e.preventDefault();
   $("lErr").textContent = ""; $("lBtn").disabled = true;
   try {
-    await api("/api/login", { method: "POST", body: { name: $("lName").value, pin: $("lPin").value } });
+    await api(signup ? "/api/signup" : "/api/login", { method: "POST", body: { name: $("lName").value, pin: $("lPin").value } });
     $("lPin").value = "";
     await showApp();
   } catch (err) { $("lErr").textContent = err.message; }
