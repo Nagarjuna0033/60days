@@ -1,0 +1,1742 @@
+[
+  {
+    "day": 1,
+    "date": "2026-10-29",
+    "weekday": "Thu",
+    "topic": "Arrays & Hashing",
+    "problems": [
+      {
+        "number": 1,
+        "title": "Two Sum",
+        "url": "https://leetcode.com/problems/two-sum/",
+        "difficulty": "Easy",
+        "hint": "Store value → index; look up the complement."
+      },
+      {
+        "number": 217,
+        "title": "Contains Duplicate",
+        "url": "https://leetcode.com/problems/contains-duplicate/",
+        "difficulty": "Easy",
+        "hint": "A set answers 'seen before?' in O(1)."
+      },
+      {
+        "number": 49,
+        "title": "Group Anagrams",
+        "url": "https://leetcode.com/problems/group-anagrams/",
+        "difficulty": "Medium",
+        "hint": "What key do all anagrams share?"
+      }
+    ]
+  },
+  {
+    "day": 2,
+    "date": "2026-10-30",
+    "weekday": "Fri",
+    "topic": "Arrays & Hashing",
+    "problems": [
+      {
+        "number": 242,
+        "title": "Valid Anagram",
+        "url": "https://leetcode.com/problems/valid-anagram/",
+        "difficulty": "Easy",
+        "hint": "Count characters, compare counts."
+      },
+      {
+        "number": 347,
+        "title": "Top K Frequent Elements",
+        "url": "https://leetcode.com/problems/top-k-frequent-elements/",
+        "difficulty": "Medium",
+        "hint": "Bucket sort by frequency beats a heap."
+      },
+      {
+        "number": 238,
+        "title": "Product of Array Except Self",
+        "url": "https://leetcode.com/problems/product-of-array-except-self/",
+        "difficulty": "Medium",
+        "hint": "Prefix product × suffix product, no division."
+      }
+    ]
+  },
+  {
+    "day": 3,
+    "date": "2026-10-31",
+    "weekday": "Sat",
+    "topic": "Arrays & Hashing",
+    "problems": [
+      {
+        "number": 121,
+        "title": "Best Time to Buy and Sell Stock",
+        "url": "https://leetcode.com/problems/best-time-to-buy-and-sell-stock/",
+        "difficulty": "Easy",
+        "hint": "Track the minimum price so far."
+      },
+      {
+        "number": 128,
+        "title": "Longest Consecutive Sequence",
+        "url": "https://leetcode.com/problems/longest-consecutive-sequence/",
+        "difficulty": "Medium",
+        "hint": "Only start counting from a number whose n-1 is absent."
+      },
+      {
+        "number": 36,
+        "title": "Valid Sudoku",
+        "url": "https://leetcode.com/problems/valid-sudoku/",
+        "difficulty": "Medium",
+        "hint": "Sets per row, column and 3×3 box (r/3, c/3)."
+      }
+    ]
+  },
+  {
+    "day": 4,
+    "date": "2026-11-01",
+    "weekday": "Sun",
+    "topic": "Prefix Sums",
+    "problems": [
+      {
+        "number": 303,
+        "title": "Range Sum Query - Immutable",
+        "url": "https://leetcode.com/problems/range-sum-query-immutable/",
+        "difficulty": "Easy",
+        "hint": "Precompute prefix sums once."
+      },
+      {
+        "number": 560,
+        "title": "Subarray Sum Equals K",
+        "url": "https://leetcode.com/problems/subarray-sum-equals-k/",
+        "difficulty": "Medium",
+        "hint": "Count of prefix sums equal to (current - k)."
+      },
+      {
+        "number": 523,
+        "title": "Continuous Subarray Sum",
+        "url": "https://leetcode.com/problems/continuous-subarray-sum/",
+        "difficulty": "Medium",
+        "hint": "Same remainder mod k twice ⇒ a multiple of k between them."
+      }
+    ]
+  },
+  {
+    "day": 5,
+    "date": "2026-11-02",
+    "weekday": "Mon",
+    "topic": "Arrays",
+    "problems": [
+      {
+        "number": 169,
+        "title": "Majority Element",
+        "url": "https://leetcode.com/problems/majority-element/",
+        "difficulty": "Easy",
+        "hint": "Boyer–Moore voting."
+      },
+      {
+        "number": 75,
+        "title": "Sort Colors",
+        "url": "https://leetcode.com/problems/sort-colors/",
+        "difficulty": "Medium",
+        "hint": "Dutch national flag: three pointers."
+      },
+      {
+        "number": 53,
+        "title": "Maximum Subarray",
+        "url": "https://leetcode.com/problems/maximum-subarray/",
+        "difficulty": "Medium",
+        "hint": "Kadane: extend or restart."
+      }
+    ]
+  },
+  {
+    "day": 6,
+    "date": "2026-11-03",
+    "weekday": "Tue",
+    "topic": "Arrays",
+    "problems": [
+      {
+        "number": 88,
+        "title": "Merge Sorted Array",
+        "url": "https://leetcode.com/problems/merge-sorted-array/",
+        "difficulty": "Easy",
+        "hint": "Fill from the back."
+      },
+      {
+        "number": 189,
+        "title": "Rotate Array",
+        "url": "https://leetcode.com/problems/rotate-array/",
+        "difficulty": "Medium",
+        "hint": "Reverse all, then reverse the two parts."
+      },
+      {
+        "number": 41,
+        "title": "First Missing Positive",
+        "url": "https://leetcode.com/problems/first-missing-positive/",
+        "difficulty": "Hard",
+        "hint": "Use the array itself as a hash: put x at index x-1."
+      }
+    ]
+  },
+  {
+    "day": 7,
+    "date": "2026-11-04",
+    "weekday": "Wed",
+    "topic": "Matrix",
+    "problems": [
+      {
+        "number": 448,
+        "title": "Find All Numbers Disappeared in an Array",
+        "url": "https://leetcode.com/problems/find-all-numbers-disappeared-in-an-array/",
+        "difficulty": "Easy",
+        "hint": "Mark visited indices by negating."
+      },
+      {
+        "number": 54,
+        "title": "Spiral Matrix",
+        "url": "https://leetcode.com/problems/spiral-matrix/",
+        "difficulty": "Medium",
+        "hint": "Shrink four boundaries."
+      },
+      {
+        "number": 48,
+        "title": "Rotate Image",
+        "url": "https://leetcode.com/problems/rotate-image/",
+        "difficulty": "Medium",
+        "hint": "Transpose, then reverse each row."
+      }
+    ]
+  },
+  {
+    "day": 8,
+    "date": "2026-11-05",
+    "weekday": "Thu",
+    "topic": "Two Pointers",
+    "problems": [
+      {
+        "number": 125,
+        "title": "Valid Palindrome",
+        "url": "https://leetcode.com/problems/valid-palindrome/",
+        "difficulty": "Easy",
+        "hint": "Skip non-alphanumerics from both ends."
+      },
+      {
+        "number": 167,
+        "title": "Two Sum II - Input Array Is Sorted",
+        "url": "https://leetcode.com/problems/two-sum-ii-input-array-is-sorted/",
+        "difficulty": "Medium",
+        "hint": "Sorted ⇒ move left or right based on the sum."
+      },
+      {
+        "number": 15,
+        "title": "3Sum",
+        "url": "https://leetcode.com/problems/3sum/",
+        "difficulty": "Medium",
+        "hint": "Sort, fix one, two-pointer the rest, skip duplicates."
+      }
+    ]
+  },
+  {
+    "day": 9,
+    "date": "2026-11-06",
+    "weekday": "Fri",
+    "topic": "Two Pointers",
+    "problems": [
+      {
+        "number": 283,
+        "title": "Move Zeroes",
+        "url": "https://leetcode.com/problems/move-zeroes/",
+        "difficulty": "Easy",
+        "hint": "Write pointer for non-zeros."
+      },
+      {
+        "number": 11,
+        "title": "Container With Most Water",
+        "url": "https://leetcode.com/problems/container-with-most-water/",
+        "difficulty": "Medium",
+        "hint": "Always move the shorter wall."
+      },
+      {
+        "number": 42,
+        "title": "Trapping Rain Water",
+        "url": "https://leetcode.com/problems/trapping-rain-water/",
+        "difficulty": "Hard",
+        "hint": "Water at i = min(maxLeft, maxRight) - h[i]."
+      }
+    ]
+  },
+  {
+    "day": 10,
+    "date": "2026-11-07",
+    "weekday": "Sat",
+    "topic": "Two Pointers",
+    "problems": [
+      {
+        "number": 26,
+        "title": "Remove Duplicates from Sorted Array",
+        "url": "https://leetcode.com/problems/remove-duplicates-from-sorted-array/",
+        "difficulty": "Easy",
+        "hint": "Slow/fast pointers."
+      },
+      {
+        "number": 16,
+        "title": "3Sum Closest",
+        "url": "https://leetcode.com/problems/3sum-closest/",
+        "difficulty": "Medium",
+        "hint": "Same as 3Sum, track the best distance."
+      },
+      {
+        "number": 18,
+        "title": "4Sum",
+        "url": "https://leetcode.com/problems/4sum/",
+        "difficulty": "Medium",
+        "hint": "Two fixed loops + two pointers; watch for overflow."
+      }
+    ]
+  },
+  {
+    "day": 11,
+    "date": "2026-11-08",
+    "weekday": "Sun",
+    "topic": "Sliding Window",
+    "problems": [
+      {
+        "number": 643,
+        "title": "Maximum Average Subarray I",
+        "url": "https://leetcode.com/problems/maximum-average-subarray-i/",
+        "difficulty": "Easy",
+        "hint": "Fixed window: add right, drop left."
+      },
+      {
+        "number": 3,
+        "title": "Longest Substring Without Repeating Characters",
+        "url": "https://leetcode.com/problems/longest-substring-without-repeating-characters/",
+        "difficulty": "Medium",
+        "hint": "Shrink the window when a char repeats."
+      },
+      {
+        "number": 424,
+        "title": "Longest Repeating Character Replacement",
+        "url": "https://leetcode.com/problems/longest-repeating-character-replacement/",
+        "difficulty": "Medium",
+        "hint": "Valid while windowLen - maxFreq ≤ k."
+      }
+    ]
+  },
+  {
+    "day": 12,
+    "date": "2026-11-09",
+    "weekday": "Mon",
+    "topic": "Sliding Window",
+    "problems": [
+      {
+        "number": 567,
+        "title": "Permutation in String",
+        "url": "https://leetcode.com/problems/permutation-in-string/",
+        "difficulty": "Medium",
+        "hint": "Fixed window with 26-count arrays."
+      },
+      {
+        "number": 438,
+        "title": "Find All Anagrams in a String",
+        "url": "https://leetcode.com/problems/find-all-anagrams-in-a-string/",
+        "difficulty": "Medium",
+        "hint": "Same window, collect every match."
+      },
+      {
+        "number": 76,
+        "title": "Minimum Window Substring",
+        "url": "https://leetcode.com/problems/minimum-window-substring/",
+        "difficulty": "Hard",
+        "hint": "Expand until valid, shrink while valid; track 'have' vs 'need'."
+      }
+    ]
+  },
+  {
+    "day": 13,
+    "date": "2026-11-10",
+    "weekday": "Tue",
+    "topic": "Sliding Window",
+    "problems": [
+      {
+        "number": 209,
+        "title": "Minimum Size Subarray Sum",
+        "url": "https://leetcode.com/problems/minimum-size-subarray-sum/",
+        "difficulty": "Medium",
+        "hint": "Variable window on positive numbers."
+      },
+      {
+        "number": 1004,
+        "title": "Max Consecutive Ones III",
+        "url": "https://leetcode.com/problems/max-consecutive-ones-iii/",
+        "difficulty": "Medium",
+        "hint": "Window with at most k zeros."
+      },
+      {
+        "number": 239,
+        "title": "Sliding Window Maximum",
+        "url": "https://leetcode.com/problems/sliding-window-maximum/",
+        "difficulty": "Hard",
+        "hint": "Monotonic decreasing deque of indices."
+      }
+    ]
+  },
+  {
+    "day": 14,
+    "date": "2026-11-11",
+    "weekday": "Wed",
+    "topic": "Strings",
+    "problems": [
+      {
+        "number": 14,
+        "title": "Longest Common Prefix",
+        "url": "https://leetcode.com/problems/longest-common-prefix/",
+        "difficulty": "Easy",
+        "hint": "Compare column by column."
+      },
+      {
+        "number": 5,
+        "title": "Longest Palindromic Substring",
+        "url": "https://leetcode.com/problems/longest-palindromic-substring/",
+        "difficulty": "Medium",
+        "hint": "Expand around each center (odd and even)."
+      },
+      {
+        "number": 8,
+        "title": "String to Integer (atoi)",
+        "url": "https://leetcode.com/problems/string-to-integer-atoi/",
+        "difficulty": "Medium",
+        "hint": "Careful parsing: spaces, sign, overflow."
+      }
+    ]
+  },
+  {
+    "day": 15,
+    "date": "2026-11-12",
+    "weekday": "Thu",
+    "topic": "Stack",
+    "problems": [
+      {
+        "number": 20,
+        "title": "Valid Parentheses",
+        "url": "https://leetcode.com/problems/valid-parentheses/",
+        "difficulty": "Easy",
+        "hint": "Push opens, match on close."
+      },
+      {
+        "number": 155,
+        "title": "Min Stack",
+        "url": "https://leetcode.com/problems/min-stack/",
+        "difficulty": "Medium",
+        "hint": "Store the min alongside each value."
+      },
+      {
+        "number": 150,
+        "title": "Evaluate Reverse Polish Notation",
+        "url": "https://leetcode.com/problems/evaluate-reverse-polish-notation/",
+        "difficulty": "Medium",
+        "hint": "Operands on a stack; pop two per operator."
+      }
+    ]
+  },
+  {
+    "day": 16,
+    "date": "2026-11-13",
+    "weekday": "Fri",
+    "topic": "Stack & Queue",
+    "problems": [
+      {
+        "number": 232,
+        "title": "Implement Queue using Stacks",
+        "url": "https://leetcode.com/problems/implement-queue-using-stacks/",
+        "difficulty": "Easy",
+        "hint": "In-stack and out-stack, amortized O(1)."
+      },
+      {
+        "number": 739,
+        "title": "Daily Temperatures",
+        "url": "https://leetcode.com/problems/daily-temperatures/",
+        "difficulty": "Medium",
+        "hint": "Monotonic stack of waiting indices."
+      },
+      {
+        "number": 394,
+        "title": "Decode String",
+        "url": "https://leetcode.com/problems/decode-string/",
+        "difficulty": "Medium",
+        "hint": "Stack of (count, built string) for nesting."
+      }
+    ]
+  },
+  {
+    "day": 17,
+    "date": "2026-11-14",
+    "weekday": "Sat",
+    "topic": "Monotonic Stack",
+    "problems": [
+      {
+        "number": 496,
+        "title": "Next Greater Element I",
+        "url": "https://leetcode.com/problems/next-greater-element-i/",
+        "difficulty": "Easy",
+        "hint": "Monotonic stack + map."
+      },
+      {
+        "number": 735,
+        "title": "Asteroid Collision",
+        "url": "https://leetcode.com/problems/asteroid-collision/",
+        "difficulty": "Medium",
+        "hint": "Only right-moving vs incoming left-moving collide."
+      },
+      {
+        "number": 84,
+        "title": "Largest Rectangle in Histogram",
+        "url": "https://leetcode.com/problems/largest-rectangle-in-histogram/",
+        "difficulty": "Hard",
+        "hint": "For each bar: nearest smaller on both sides."
+      }
+    ]
+  },
+  {
+    "day": 18,
+    "date": "2026-11-15",
+    "weekday": "Sun",
+    "topic": "Binary Search",
+    "problems": [
+      {
+        "number": 704,
+        "title": "Binary Search",
+        "url": "https://leetcode.com/problems/binary-search/",
+        "difficulty": "Easy",
+        "hint": "Get the loop invariant right: lo ≤ hi."
+      },
+      {
+        "number": 74,
+        "title": "Search a 2D Matrix",
+        "url": "https://leetcode.com/problems/search-a-2d-matrix/",
+        "difficulty": "Medium",
+        "hint": "Treat it as one sorted array: idx → (idx/n, idx%n)."
+      },
+      {
+        "number": 34,
+        "title": "Find First and Last Position of Element in Sorted Array",
+        "url": "https://leetcode.com/problems/find-first-and-last-position-of-element-in-sorted-array/",
+        "difficulty": "Medium",
+        "hint": "Two binary searches: lower and upper bound."
+      }
+    ]
+  },
+  {
+    "day": 19,
+    "date": "2026-11-16",
+    "weekday": "Mon",
+    "topic": "Binary Search",
+    "problems": [
+      {
+        "number": 35,
+        "title": "Search Insert Position",
+        "url": "https://leetcode.com/problems/search-insert-position/",
+        "difficulty": "Easy",
+        "hint": "Lower bound."
+      },
+      {
+        "number": 33,
+        "title": "Search in Rotated Sorted Array",
+        "url": "https://leetcode.com/problems/search-in-rotated-sorted-array/",
+        "difficulty": "Medium",
+        "hint": "One half is always sorted — which one?"
+      },
+      {
+        "number": 153,
+        "title": "Find Minimum in Rotated Sorted Array",
+        "url": "https://leetcode.com/problems/find-minimum-in-rotated-sorted-array/",
+        "difficulty": "Medium",
+        "hint": "Compare mid with right end."
+      }
+    ]
+  },
+  {
+    "day": 20,
+    "date": "2026-11-17",
+    "weekday": "Tue",
+    "topic": "Binary Search on Answer",
+    "problems": [
+      {
+        "number": 875,
+        "title": "Koko Eating Bananas",
+        "url": "https://leetcode.com/problems/koko-eating-bananas/",
+        "difficulty": "Medium",
+        "hint": "Binary search the speed; check feasibility."
+      },
+      {
+        "number": 1011,
+        "title": "Capacity To Ship Packages Within D Days",
+        "url": "https://leetcode.com/problems/capacity-to-ship-packages-within-d-days/",
+        "difficulty": "Medium",
+        "hint": "Search between max(w) and sum(w)."
+      },
+      {
+        "number": 4,
+        "title": "Median of Two Sorted Arrays",
+        "url": "https://leetcode.com/problems/median-of-two-sorted-arrays/",
+        "difficulty": "Hard",
+        "hint": "Binary search the partition of the smaller array."
+      }
+    ]
+  },
+  {
+    "day": 21,
+    "date": "2026-11-18",
+    "weekday": "Wed",
+    "topic": "Binary Search",
+    "problems": [
+      {
+        "number": 162,
+        "title": "Find Peak Element",
+        "url": "https://leetcode.com/problems/find-peak-element/",
+        "difficulty": "Medium",
+        "hint": "Walk uphill: compare mid with mid+1."
+      },
+      {
+        "number": 981,
+        "title": "Time Based Key-Value Store",
+        "url": "https://leetcode.com/problems/time-based-key-value-store/",
+        "difficulty": "Medium",
+        "hint": "Per key: sorted timestamps + upper bound."
+      },
+      {
+        "number": 410,
+        "title": "Split Array Largest Sum",
+        "url": "https://leetcode.com/problems/split-array-largest-sum/",
+        "difficulty": "Hard",
+        "hint": "Binary search the max sum; greedy split check."
+      }
+    ]
+  },
+  {
+    "day": 22,
+    "date": "2026-11-19",
+    "weekday": "Thu",
+    "topic": "Linked List",
+    "problems": [
+      {
+        "number": 206,
+        "title": "Reverse Linked List",
+        "url": "https://leetcode.com/problems/reverse-linked-list/",
+        "difficulty": "Easy",
+        "hint": "prev, curr, next — do it iteratively and recursively."
+      },
+      {
+        "number": 21,
+        "title": "Merge Two Sorted Lists",
+        "url": "https://leetcode.com/problems/merge-two-sorted-lists/",
+        "difficulty": "Easy",
+        "hint": "Dummy head."
+      },
+      {
+        "number": 142,
+        "title": "Linked List Cycle II",
+        "url": "https://leetcode.com/problems/linked-list-cycle-ii/",
+        "difficulty": "Medium",
+        "hint": "Floyd: after meeting, reset one pointer to head."
+      }
+    ]
+  },
+  {
+    "day": 23,
+    "date": "2026-11-20",
+    "weekday": "Fri",
+    "topic": "Linked List",
+    "problems": [
+      {
+        "number": 876,
+        "title": "Middle of the Linked List",
+        "url": "https://leetcode.com/problems/middle-of-the-linked-list/",
+        "difficulty": "Easy",
+        "hint": "Slow/fast pointers."
+      },
+      {
+        "number": 19,
+        "title": "Remove Nth Node From End of List",
+        "url": "https://leetcode.com/problems/remove-nth-node-from-end-of-list/",
+        "difficulty": "Medium",
+        "hint": "Gap of n between two pointers."
+      },
+      {
+        "number": 143,
+        "title": "Reorder List",
+        "url": "https://leetcode.com/problems/reorder-list/",
+        "difficulty": "Medium",
+        "hint": "Find middle, reverse second half, merge."
+      }
+    ]
+  },
+  {
+    "day": 24,
+    "date": "2026-11-21",
+    "weekday": "Sat",
+    "topic": "Linked List",
+    "problems": [
+      {
+        "number": 234,
+        "title": "Palindrome Linked List",
+        "url": "https://leetcode.com/problems/palindrome-linked-list/",
+        "difficulty": "Easy",
+        "hint": "Reverse the second half and compare."
+      },
+      {
+        "number": 2,
+        "title": "Add Two Numbers",
+        "url": "https://leetcode.com/problems/add-two-numbers/",
+        "difficulty": "Medium",
+        "hint": "Carry through; don't forget the final carry."
+      },
+      {
+        "number": 138,
+        "title": "Copy List with Random Pointer",
+        "url": "https://leetcode.com/problems/copy-list-with-random-pointer/",
+        "difficulty": "Medium",
+        "hint": "Map old → new, or interleave copies."
+      }
+    ]
+  },
+  {
+    "day": 25,
+    "date": "2026-11-22",
+    "weekday": "Sun",
+    "topic": "Linked List",
+    "problems": [
+      {
+        "number": 160,
+        "title": "Intersection of Two Linked Lists",
+        "url": "https://leetcode.com/problems/intersection-of-two-linked-lists/",
+        "difficulty": "Easy",
+        "hint": "Switch heads at the end; they meet."
+      },
+      {
+        "number": 148,
+        "title": "Sort List",
+        "url": "https://leetcode.com/problems/sort-list/",
+        "difficulty": "Medium",
+        "hint": "Merge sort on a list."
+      },
+      {
+        "number": 25,
+        "title": "Reverse Nodes in k-Group",
+        "url": "https://leetcode.com/problems/reverse-nodes-in-k-group/",
+        "difficulty": "Hard",
+        "hint": "Check k nodes exist, reverse, reconnect."
+      }
+    ]
+  },
+  {
+    "day": 26,
+    "date": "2026-11-23",
+    "weekday": "Mon",
+    "topic": "Binary Trees",
+    "problems": [
+      {
+        "number": 104,
+        "title": "Maximum Depth of Binary Tree",
+        "url": "https://leetcode.com/problems/maximum-depth-of-binary-tree/",
+        "difficulty": "Easy",
+        "hint": "1 + max(left, right)."
+      },
+      {
+        "number": 226,
+        "title": "Invert Binary Tree",
+        "url": "https://leetcode.com/problems/invert-binary-tree/",
+        "difficulty": "Easy",
+        "hint": "Swap children recursively."
+      },
+      {
+        "number": 102,
+        "title": "Binary Tree Level Order Traversal",
+        "url": "https://leetcode.com/problems/binary-tree-level-order-traversal/",
+        "difficulty": "Medium",
+        "hint": "BFS, process level by queue size."
+      }
+    ]
+  },
+  {
+    "day": 27,
+    "date": "2026-11-24",
+    "weekday": "Tue",
+    "topic": "Binary Trees",
+    "problems": [
+      {
+        "number": 100,
+        "title": "Same Tree",
+        "url": "https://leetcode.com/problems/same-tree/",
+        "difficulty": "Easy",
+        "hint": "Compare structure and values together."
+      },
+      {
+        "number": 543,
+        "title": "Diameter of Binary Tree",
+        "url": "https://leetcode.com/problems/diameter-of-binary-tree/",
+        "difficulty": "Easy",
+        "hint": "Return height, update the global best."
+      },
+      {
+        "number": 199,
+        "title": "Binary Tree Right Side View",
+        "url": "https://leetcode.com/problems/binary-tree-right-side-view/",
+        "difficulty": "Medium",
+        "hint": "Last node of each BFS level."
+      }
+    ]
+  },
+  {
+    "day": 28,
+    "date": "2026-11-25",
+    "weekday": "Wed",
+    "topic": "BST",
+    "problems": [
+      {
+        "number": 110,
+        "title": "Balanced Binary Tree",
+        "url": "https://leetcode.com/problems/balanced-binary-tree/",
+        "difficulty": "Easy",
+        "hint": "Return -1 as an 'unbalanced' signal."
+      },
+      {
+        "number": 98,
+        "title": "Validate Binary Search Tree",
+        "url": "https://leetcode.com/problems/validate-binary-search-tree/",
+        "difficulty": "Medium",
+        "hint": "Pass (min, max) bounds down."
+      },
+      {
+        "number": 230,
+        "title": "Kth Smallest Element in a BST",
+        "url": "https://leetcode.com/problems/kth-smallest-element-in-a-bst/",
+        "difficulty": "Medium",
+        "hint": "In-order traversal is sorted."
+      }
+    ]
+  },
+  {
+    "day": 29,
+    "date": "2026-11-26",
+    "weekday": "Thu",
+    "topic": "Trees",
+    "problems": [
+      {
+        "number": 572,
+        "title": "Subtree of Another Tree",
+        "url": "https://leetcode.com/problems/subtree-of-another-tree/",
+        "difficulty": "Easy",
+        "hint": "isSameTree at every node."
+      },
+      {
+        "number": 236,
+        "title": "Lowest Common Ancestor of a Binary Tree",
+        "url": "https://leetcode.com/problems/lowest-common-ancestor-of-a-binary-tree/",
+        "difficulty": "Medium",
+        "hint": "If both sides return non-null, this node is the LCA."
+      },
+      {
+        "number": 105,
+        "title": "Construct Binary Tree from Preorder and Inorder Traversal",
+        "url": "https://leetcode.com/problems/construct-binary-tree-from-preorder-and-inorder-traversal/",
+        "difficulty": "Medium",
+        "hint": "Preorder gives root; inorder index splits left/right."
+      }
+    ]
+  },
+  {
+    "day": 30,
+    "date": "2026-11-27",
+    "weekday": "Fri",
+    "topic": "Trees",
+    "problems": [
+      {
+        "number": 112,
+        "title": "Path Sum",
+        "url": "https://leetcode.com/problems/path-sum/",
+        "difficulty": "Easy",
+        "hint": "Subtract as you go down."
+      },
+      {
+        "number": 103,
+        "title": "Binary Tree Zigzag Level Order Traversal",
+        "url": "https://leetcode.com/problems/binary-tree-zigzag-level-order-traversal/",
+        "difficulty": "Medium",
+        "hint": "BFS + alternate direction."
+      },
+      {
+        "number": 124,
+        "title": "Binary Tree Maximum Path Sum",
+        "url": "https://leetcode.com/problems/binary-tree-maximum-path-sum/",
+        "difficulty": "Hard",
+        "hint": "Return the best single branch; update with both branches."
+      }
+    ]
+  },
+  {
+    "day": 31,
+    "date": "2026-11-28",
+    "weekday": "Sat",
+    "topic": "Trees",
+    "problems": [
+      {
+        "number": 235,
+        "title": "Lowest Common Ancestor of a Binary Search Tree",
+        "url": "https://leetcode.com/problems/lowest-common-ancestor-of-a-binary-search-tree/",
+        "difficulty": "Medium",
+        "hint": "Use BST ordering to pick a side."
+      },
+      {
+        "number": 1448,
+        "title": "Count Good Nodes in Binary Tree",
+        "url": "https://leetcode.com/problems/count-good-nodes-in-binary-tree/",
+        "difficulty": "Medium",
+        "hint": "Carry the max seen on the path."
+      },
+      {
+        "number": 297,
+        "title": "Serialize and Deserialize Binary Tree",
+        "url": "https://leetcode.com/problems/serialize-and-deserialize-binary-tree/",
+        "difficulty": "Hard",
+        "hint": "Preorder with null markers."
+      }
+    ]
+  },
+  {
+    "day": 32,
+    "date": "2026-11-29",
+    "weekday": "Sun",
+    "topic": "Heaps / Top-K",
+    "problems": [
+      {
+        "number": 703,
+        "title": "Kth Largest Element in a Stream",
+        "url": "https://leetcode.com/problems/kth-largest-element-in-a-stream/",
+        "difficulty": "Easy",
+        "hint": "Min-heap of size k."
+      },
+      {
+        "number": 215,
+        "title": "Kth Largest Element in an Array",
+        "url": "https://leetcode.com/problems/kth-largest-element-in-an-array/",
+        "difficulty": "Medium",
+        "hint": "Heap O(n log k) or Quickselect O(n) avg."
+      },
+      {
+        "number": 973,
+        "title": "K Closest Points to Origin",
+        "url": "https://leetcode.com/problems/k-closest-points-to-origin/",
+        "difficulty": "Medium",
+        "hint": "Max-heap of size k on distance²."
+      }
+    ]
+  },
+  {
+    "day": 33,
+    "date": "2026-11-30",
+    "weekday": "Mon",
+    "topic": "Heaps",
+    "problems": [
+      {
+        "number": 1046,
+        "title": "Last Stone Weight",
+        "url": "https://leetcode.com/problems/last-stone-weight/",
+        "difficulty": "Easy",
+        "hint": "Max-heap simulation."
+      },
+      {
+        "number": 621,
+        "title": "Task Scheduler",
+        "url": "https://leetcode.com/problems/task-scheduler/",
+        "difficulty": "Medium",
+        "hint": "Most frequent task decides the idle slots."
+      },
+      {
+        "number": 295,
+        "title": "Find Median from Data Stream",
+        "url": "https://leetcode.com/problems/find-median-from-data-stream/",
+        "difficulty": "Hard",
+        "hint": "Two heaps: max-heap low half, min-heap high half."
+      }
+    ]
+  },
+  {
+    "day": 34,
+    "date": "2026-12-01",
+    "weekday": "Tue",
+    "topic": "Intervals",
+    "problems": [
+      {
+        "number": 56,
+        "title": "Merge Intervals",
+        "url": "https://leetcode.com/problems/merge-intervals/",
+        "difficulty": "Medium",
+        "hint": "Sort by start, extend or push."
+      },
+      {
+        "number": 57,
+        "title": "Insert Interval",
+        "url": "https://leetcode.com/problems/insert-interval/",
+        "difficulty": "Medium",
+        "hint": "Before, overlapping, after."
+      },
+      {
+        "number": 435,
+        "title": "Non-overlapping Intervals",
+        "url": "https://leetcode.com/problems/non-overlapping-intervals/",
+        "difficulty": "Medium",
+        "hint": "Sort by end; keep the earliest finishing."
+      }
+    ]
+  },
+  {
+    "day": 35,
+    "date": "2026-12-02",
+    "weekday": "Wed",
+    "topic": "Greedy",
+    "problems": [
+      {
+        "number": 55,
+        "title": "Jump Game",
+        "url": "https://leetcode.com/problems/jump-game/",
+        "difficulty": "Medium",
+        "hint": "Track the farthest reachable index."
+      },
+      {
+        "number": 134,
+        "title": "Gas Station",
+        "url": "https://leetcode.com/problems/gas-station/",
+        "difficulty": "Medium",
+        "hint": "If the tank goes negative, start after this station."
+      },
+      {
+        "number": 763,
+        "title": "Partition Labels",
+        "url": "https://leetcode.com/problems/partition-labels/",
+        "difficulty": "Medium",
+        "hint": "Last occurrence of each char sets the cut."
+      }
+    ]
+  },
+  {
+    "day": 36,
+    "date": "2026-12-03",
+    "weekday": "Thu",
+    "topic": "Graphs: DFS/BFS",
+    "problems": [
+      {
+        "number": 733,
+        "title": "Flood Fill",
+        "url": "https://leetcode.com/problems/flood-fill/",
+        "difficulty": "Easy",
+        "hint": "DFS from the start pixel."
+      },
+      {
+        "number": 200,
+        "title": "Number of Islands",
+        "url": "https://leetcode.com/problems/number-of-islands/",
+        "difficulty": "Medium",
+        "hint": "Sink each island you visit."
+      },
+      {
+        "number": 695,
+        "title": "Max Area of Island",
+        "url": "https://leetcode.com/problems/max-area-of-island/",
+        "difficulty": "Medium",
+        "hint": "DFS returns the area."
+      }
+    ]
+  },
+  {
+    "day": 37,
+    "date": "2026-12-04",
+    "weekday": "Fri",
+    "topic": "Graphs: DFS/BFS",
+    "problems": [
+      {
+        "number": 133,
+        "title": "Clone Graph",
+        "url": "https://leetcode.com/problems/clone-graph/",
+        "difficulty": "Medium",
+        "hint": "Map old → new to handle cycles."
+      },
+      {
+        "number": 994,
+        "title": "Rotting Oranges",
+        "url": "https://leetcode.com/problems/rotting-oranges/",
+        "difficulty": "Medium",
+        "hint": "Multi-source BFS, count minutes by level."
+      },
+      {
+        "number": 417,
+        "title": "Pacific Atlantic Water Flow",
+        "url": "https://leetcode.com/problems/pacific-atlantic-water-flow/",
+        "difficulty": "Medium",
+        "hint": "Reverse it: flow uphill from each ocean."
+      }
+    ]
+  },
+  {
+    "day": 38,
+    "date": "2026-12-05",
+    "weekday": "Sat",
+    "topic": "Graphs: BFS",
+    "problems": [
+      {
+        "number": 1971,
+        "title": "Find if Path Exists in Graph",
+        "url": "https://leetcode.com/problems/find-if-path-exists-in-graph/",
+        "difficulty": "Easy",
+        "hint": "Adjacency list + BFS."
+      },
+      {
+        "number": 130,
+        "title": "Surrounded Regions",
+        "url": "https://leetcode.com/problems/surrounded-regions/",
+        "difficulty": "Medium",
+        "hint": "Mark border-connected 'O's first."
+      },
+      {
+        "number": 542,
+        "title": "01 Matrix",
+        "url": "https://leetcode.com/problems/01-matrix/",
+        "difficulty": "Medium",
+        "hint": "Multi-source BFS from all zeros."
+      }
+    ]
+  },
+  {
+    "day": 39,
+    "date": "2026-12-06",
+    "weekday": "Sun",
+    "topic": "Topological Sort",
+    "problems": [
+      {
+        "number": 207,
+        "title": "Course Schedule",
+        "url": "https://leetcode.com/problems/course-schedule/",
+        "difficulty": "Medium",
+        "hint": "Cycle detection — Kahn's algorithm."
+      },
+      {
+        "number": 210,
+        "title": "Course Schedule II",
+        "url": "https://leetcode.com/problems/course-schedule-ii/",
+        "difficulty": "Medium",
+        "hint": "Return the Kahn order."
+      },
+      {
+        "number": 127,
+        "title": "Word Ladder",
+        "url": "https://leetcode.com/problems/word-ladder/",
+        "difficulty": "Hard",
+        "hint": "BFS on words; wildcard patterns as neighbours."
+      }
+    ]
+  },
+  {
+    "day": 40,
+    "date": "2026-12-07",
+    "weekday": "Mon",
+    "topic": "Union-Find",
+    "problems": [
+      {
+        "number": 547,
+        "title": "Number of Provinces",
+        "url": "https://leetcode.com/problems/number-of-provinces/",
+        "difficulty": "Medium",
+        "hint": "Union-find with path compression."
+      },
+      {
+        "number": 684,
+        "title": "Redundant Connection",
+        "url": "https://leetcode.com/problems/redundant-connection/",
+        "difficulty": "Medium",
+        "hint": "First edge whose ends are already connected."
+      },
+      {
+        "number": 721,
+        "title": "Accounts Merge",
+        "url": "https://leetcode.com/problems/accounts-merge/",
+        "difficulty": "Medium",
+        "hint": "Union emails; group by root."
+      }
+    ]
+  },
+  {
+    "day": 41,
+    "date": "2026-12-08",
+    "weekday": "Tue",
+    "topic": "Shortest Paths",
+    "problems": [
+      {
+        "number": 743,
+        "title": "Network Delay Time",
+        "url": "https://leetcode.com/problems/network-delay-time/",
+        "difficulty": "Medium",
+        "hint": "Dijkstra with a min-heap."
+      },
+      {
+        "number": 787,
+        "title": "Cheapest Flights Within K Stops",
+        "url": "https://leetcode.com/problems/cheapest-flights-within-k-stops/",
+        "difficulty": "Medium",
+        "hint": "Bellman-Ford for k+1 rounds."
+      },
+      {
+        "number": 1631,
+        "title": "Path With Minimum Effort",
+        "url": "https://leetcode.com/problems/path-with-minimum-effort/",
+        "difficulty": "Medium",
+        "hint": "Dijkstra where cost = max step so far."
+      }
+    ]
+  },
+  {
+    "day": 42,
+    "date": "2026-12-09",
+    "weekday": "Wed",
+    "topic": "MST & Graph Mix",
+    "problems": [
+      {
+        "number": 997,
+        "title": "Find the Town Judge",
+        "url": "https://leetcode.com/problems/find-the-town-judge/",
+        "difficulty": "Easy",
+        "hint": "In-degree minus out-degree = n-1."
+      },
+      {
+        "number": 1584,
+        "title": "Min Cost to Connect All Points",
+        "url": "https://leetcode.com/problems/min-cost-to-connect-all-points/",
+        "difficulty": "Medium",
+        "hint": "Prim's on a complete graph."
+      },
+      {
+        "number": 778,
+        "title": "Swim in Rising Water",
+        "url": "https://leetcode.com/problems/swim-in-rising-water/",
+        "difficulty": "Hard",
+        "hint": "Dijkstra on max elevation, or binary search + BFS."
+      }
+    ]
+  },
+  {
+    "day": 43,
+    "date": "2026-12-10",
+    "weekday": "Thu",
+    "topic": "Backtracking",
+    "problems": [
+      {
+        "number": 78,
+        "title": "Subsets",
+        "url": "https://leetcode.com/problems/subsets/",
+        "difficulty": "Medium",
+        "hint": "Include / exclude each element."
+      },
+      {
+        "number": 46,
+        "title": "Permutations",
+        "url": "https://leetcode.com/problems/permutations/",
+        "difficulty": "Medium",
+        "hint": "Choose, recurse, un-choose."
+      },
+      {
+        "number": 39,
+        "title": "Combination Sum",
+        "url": "https://leetcode.com/problems/combination-sum/",
+        "difficulty": "Medium",
+        "hint": "Reuse allowed: stay on the same index."
+      }
+    ]
+  },
+  {
+    "day": 44,
+    "date": "2026-12-11",
+    "weekday": "Fri",
+    "topic": "Backtracking",
+    "problems": [
+      {
+        "number": 17,
+        "title": "Letter Combinations of a Phone Number",
+        "url": "https://leetcode.com/problems/letter-combinations-of-a-phone-number/",
+        "difficulty": "Medium",
+        "hint": "One digit per recursion level."
+      },
+      {
+        "number": 22,
+        "title": "Generate Parentheses",
+        "url": "https://leetcode.com/problems/generate-parentheses/",
+        "difficulty": "Medium",
+        "hint": "Add ')' only if close < open."
+      },
+      {
+        "number": 79,
+        "title": "Word Search",
+        "url": "https://leetcode.com/problems/word-search/",
+        "difficulty": "Medium",
+        "hint": "DFS with in-place visited marking."
+      }
+    ]
+  },
+  {
+    "day": 45,
+    "date": "2026-12-12",
+    "weekday": "Sat",
+    "topic": "Backtracking",
+    "problems": [
+      {
+        "number": 90,
+        "title": "Subsets II",
+        "url": "https://leetcode.com/problems/subsets-ii/",
+        "difficulty": "Medium",
+        "hint": "Sort, skip duplicates at the same level."
+      },
+      {
+        "number": 131,
+        "title": "Palindrome Partitioning",
+        "url": "https://leetcode.com/problems/palindrome-partitioning/",
+        "difficulty": "Medium",
+        "hint": "Cut only at palindromic prefixes."
+      },
+      {
+        "number": 51,
+        "title": "N-Queens",
+        "url": "https://leetcode.com/problems/n-queens/",
+        "difficulty": "Hard",
+        "hint": "Sets for columns and both diagonals."
+      }
+    ]
+  },
+  {
+    "day": 46,
+    "date": "2026-12-13",
+    "weekday": "Sun",
+    "topic": "1D DP",
+    "problems": [
+      {
+        "number": 70,
+        "title": "Climbing Stairs",
+        "url": "https://leetcode.com/problems/climbing-stairs/",
+        "difficulty": "Easy",
+        "hint": "It's Fibonacci."
+      },
+      {
+        "number": 198,
+        "title": "House Robber",
+        "url": "https://leetcode.com/problems/house-robber/",
+        "difficulty": "Medium",
+        "hint": "dp[i] = max(dp[i-1], dp[i-2] + a[i])."
+      },
+      {
+        "number": 213,
+        "title": "House Robber II",
+        "url": "https://leetcode.com/problems/house-robber-ii/",
+        "difficulty": "Medium",
+        "hint": "Run House Robber twice: skip first, skip last."
+      }
+    ]
+  },
+  {
+    "day": 47,
+    "date": "2026-12-14",
+    "weekday": "Mon",
+    "topic": "1D DP",
+    "problems": [
+      {
+        "number": 746,
+        "title": "Min Cost Climbing Stairs",
+        "url": "https://leetcode.com/problems/min-cost-climbing-stairs/",
+        "difficulty": "Easy",
+        "hint": "Cost to reach i from i-1 or i-2."
+      },
+      {
+        "number": 322,
+        "title": "Coin Change",
+        "url": "https://leetcode.com/problems/coin-change/",
+        "difficulty": "Medium",
+        "hint": "dp[amount] = 1 + min over coins."
+      },
+      {
+        "number": 91,
+        "title": "Decode Ways",
+        "url": "https://leetcode.com/problems/decode-ways/",
+        "difficulty": "Medium",
+        "hint": "One-digit and two-digit transitions."
+      }
+    ]
+  },
+  {
+    "day": 48,
+    "date": "2026-12-15",
+    "weekday": "Tue",
+    "topic": "1D DP",
+    "problems": [
+      {
+        "number": 300,
+        "title": "Longest Increasing Subsequence",
+        "url": "https://leetcode.com/problems/longest-increasing-subsequence/",
+        "difficulty": "Medium",
+        "hint": "O(n²) DP, then O(n log n) patience sorting."
+      },
+      {
+        "number": 139,
+        "title": "Word Break",
+        "url": "https://leetcode.com/problems/word-break/",
+        "difficulty": "Medium",
+        "hint": "dp[i] = some dp[j] && s[j..i) in dict."
+      },
+      {
+        "number": 152,
+        "title": "Maximum Product Subarray",
+        "url": "https://leetcode.com/problems/maximum-product-subarray/",
+        "difficulty": "Medium",
+        "hint": "Track both max and min (negatives flip)."
+      }
+    ]
+  },
+  {
+    "day": 49,
+    "date": "2026-12-16",
+    "weekday": "Wed",
+    "topic": "2D DP",
+    "problems": [
+      {
+        "number": 62,
+        "title": "Unique Paths",
+        "url": "https://leetcode.com/problems/unique-paths/",
+        "difficulty": "Medium",
+        "hint": "dp[r][c] = top + left; compress to 1D."
+      },
+      {
+        "number": 1143,
+        "title": "Longest Common Subsequence",
+        "url": "https://leetcode.com/problems/longest-common-subsequence/",
+        "difficulty": "Medium",
+        "hint": "Match → diagonal + 1, else max(top, left)."
+      },
+      {
+        "number": 416,
+        "title": "Partition Equal Subset Sum",
+        "url": "https://leetcode.com/problems/partition-equal-subset-sum/",
+        "difficulty": "Medium",
+        "hint": "0/1 knapsack to sum/2."
+      }
+    ]
+  },
+  {
+    "day": 50,
+    "date": "2026-12-17",
+    "weekday": "Thu",
+    "topic": "2D DP",
+    "problems": [
+      {
+        "number": 64,
+        "title": "Minimum Path Sum",
+        "url": "https://leetcode.com/problems/minimum-path-sum/",
+        "difficulty": "Medium",
+        "hint": "Grid DP, in place."
+      },
+      {
+        "number": 518,
+        "title": "Coin Change II",
+        "url": "https://leetcode.com/problems/coin-change-ii/",
+        "difficulty": "Medium",
+        "hint": "Count combinations: coins in the outer loop."
+      },
+      {
+        "number": 72,
+        "title": "Edit Distance",
+        "url": "https://leetcode.com/problems/edit-distance/",
+        "difficulty": "Medium",
+        "hint": "Insert, delete, replace → three neighbours."
+      }
+    ]
+  },
+  {
+    "day": 51,
+    "date": "2026-12-18",
+    "weekday": "Fri",
+    "topic": "Advanced DP",
+    "problems": [
+      {
+        "number": 494,
+        "title": "Target Sum",
+        "url": "https://leetcode.com/problems/target-sum/",
+        "difficulty": "Medium",
+        "hint": "Reduce to a subset sum count."
+      },
+      {
+        "number": 309,
+        "title": "Best Time to Buy and Sell Stock with Cooldown",
+        "url": "https://leetcode.com/problems/best-time-to-buy-and-sell-stock-with-cooldown/",
+        "difficulty": "Medium",
+        "hint": "State machine: hold / sold / rest."
+      },
+      {
+        "number": 329,
+        "title": "Longest Increasing Path in a Matrix",
+        "url": "https://leetcode.com/problems/longest-increasing-path-in-a-matrix/",
+        "difficulty": "Hard",
+        "hint": "DFS + memo; no visited set needed."
+      }
+    ]
+  },
+  {
+    "day": 52,
+    "date": "2026-12-19",
+    "weekday": "Sat",
+    "topic": "Advanced DP",
+    "problems": [
+      {
+        "number": 647,
+        "title": "Palindromic Substrings",
+        "url": "https://leetcode.com/problems/palindromic-substrings/",
+        "difficulty": "Medium",
+        "hint": "Expand around centers, count."
+      },
+      {
+        "number": 97,
+        "title": "Interleaving String",
+        "url": "https://leetcode.com/problems/interleaving-string/",
+        "difficulty": "Medium",
+        "hint": "dp[i][j]: can s1[:i] and s2[:j] form s3[:i+j]?"
+      },
+      {
+        "number": 312,
+        "title": "Burst Balloons",
+        "url": "https://leetcode.com/problems/burst-balloons/",
+        "difficulty": "Hard",
+        "hint": "Interval DP: which balloon bursts LAST?"
+      }
+    ]
+  },
+  {
+    "day": 53,
+    "date": "2026-12-20",
+    "weekday": "Sun",
+    "topic": "Advanced DP",
+    "problems": [
+      {
+        "number": 221,
+        "title": "Maximal Square",
+        "url": "https://leetcode.com/problems/maximal-square/",
+        "difficulty": "Medium",
+        "hint": "1 + min(top, left, diagonal)."
+      },
+      {
+        "number": 115,
+        "title": "Distinct Subsequences",
+        "url": "https://leetcode.com/problems/distinct-subsequences/",
+        "difficulty": "Hard",
+        "hint": "Match: use it or skip it."
+      },
+      {
+        "number": 10,
+        "title": "Regular Expression Matching",
+        "url": "https://leetcode.com/problems/regular-expression-matching/",
+        "difficulty": "Hard",
+        "hint": "'*' = zero of prev, or one more of prev."
+      }
+    ]
+  },
+  {
+    "day": 54,
+    "date": "2026-12-21",
+    "weekday": "Mon",
+    "topic": "Tries",
+    "problems": [
+      {
+        "number": 208,
+        "title": "Implement Trie (Prefix Tree)",
+        "url": "https://leetcode.com/problems/implement-trie-prefix-tree/",
+        "difficulty": "Medium",
+        "hint": "Node: children[26] + isEnd."
+      },
+      {
+        "number": 211,
+        "title": "Design Add and Search Words Data Structure",
+        "url": "https://leetcode.com/problems/design-add-and-search-words-data-structure/",
+        "difficulty": "Medium",
+        "hint": "'.' → DFS into all children."
+      },
+      {
+        "number": 212,
+        "title": "Word Search II",
+        "url": "https://leetcode.com/problems/word-search-ii/",
+        "difficulty": "Hard",
+        "hint": "Trie of words + board DFS; prune found words."
+      }
+    ]
+  },
+  {
+    "day": 55,
+    "date": "2026-12-22",
+    "weekday": "Tue",
+    "topic": "Design",
+    "problems": [
+      {
+        "number": 146,
+        "title": "LRU Cache",
+        "url": "https://leetcode.com/problems/lru-cache/",
+        "difficulty": "Medium",
+        "hint": "HashMap + doubly linked list (or LinkedHashMap)."
+      },
+      {
+        "number": 355,
+        "title": "Design Twitter",
+        "url": "https://leetcode.com/problems/design-twitter/",
+        "difficulty": "Medium",
+        "hint": "Merge k recent feeds with a heap."
+      },
+      {
+        "number": 460,
+        "title": "LFU Cache",
+        "url": "https://leetcode.com/problems/lfu-cache/",
+        "difficulty": "Hard",
+        "hint": "freq → LinkedHashSet, track minFreq."
+      }
+    ]
+  },
+  {
+    "day": 56,
+    "date": "2026-12-23",
+    "weekday": "Wed",
+    "topic": "Design",
+    "problems": [
+      {
+        "number": 380,
+        "title": "Insert Delete GetRandom O(1)",
+        "url": "https://leetcode.com/problems/insert-delete-getrandom-o1/",
+        "difficulty": "Medium",
+        "hint": "Array + index map; swap with last to delete."
+      },
+      {
+        "number": 1146,
+        "title": "Snapshot Array",
+        "url": "https://leetcode.com/problems/snapshot-array/",
+        "difficulty": "Medium",
+        "hint": "Per index: list of (snapId, value) + binary search."
+      },
+      {
+        "number": 1472,
+        "title": "Design Browser History",
+        "url": "https://leetcode.com/problems/design-browser-history/",
+        "difficulty": "Medium",
+        "hint": "Like a nav back stack: list + current pointer."
+      }
+    ]
+  },
+  {
+    "day": 57,
+    "date": "2026-12-24",
+    "weekday": "Thu",
+    "topic": "🏆 Final Boss 1/4",
+    "problems": [
+      {
+        "number": 45,
+        "title": "Jump Game II",
+        "url": "https://leetcode.com/problems/jump-game-ii/",
+        "difficulty": "Medium",
+        "hint": "BFS by levels of reach."
+      },
+      {
+        "number": 452,
+        "title": "Minimum Number of Arrows to Burst Balloons",
+        "url": "https://leetcode.com/problems/minimum-number-of-arrows-to-burst-balloons/",
+        "difficulty": "Medium",
+        "hint": "Sort by end, greedy."
+      },
+      {
+        "number": 23,
+        "title": "Merge k Sorted Lists",
+        "url": "https://leetcode.com/problems/merge-k-sorted-lists/",
+        "difficulty": "Hard",
+        "hint": "Min-heap of list heads."
+      }
+    ]
+  },
+  {
+    "day": 58,
+    "date": "2026-12-25",
+    "weekday": "Fri",
+    "topic": "🏆 Final Boss 2/4",
+    "problems": [
+      {
+        "number": 662,
+        "title": "Maximum Width of Binary Tree",
+        "url": "https://leetcode.com/problems/maximum-width-of-binary-tree/",
+        "difficulty": "Medium",
+        "hint": "Index nodes like a heap: 2i, 2i+1."
+      },
+      {
+        "number": 901,
+        "title": "Online Stock Span",
+        "url": "https://leetcode.com/problems/online-stock-span/",
+        "difficulty": "Medium",
+        "hint": "Monotonic stack of (price, span)."
+      },
+      {
+        "number": 224,
+        "title": "Basic Calculator",
+        "url": "https://leetcode.com/problems/basic-calculator/",
+        "difficulty": "Hard",
+        "hint": "Stack of (result, sign) at each '('."
+      }
+    ]
+  },
+  {
+    "day": 59,
+    "date": "2026-12-26",
+    "weekday": "Sat",
+    "topic": "🏆 Final Boss 3/4",
+    "problems": [
+      {
+        "number": 713,
+        "title": "Subarray Product Less Than K",
+        "url": "https://leetcode.com/problems/subarray-product-less-than-k/",
+        "difficulty": "Medium",
+        "hint": "Window adds (right - left + 1) subarrays."
+      },
+      {
+        "number": 373,
+        "title": "Find K Pairs with Smallest Sums",
+        "url": "https://leetcode.com/problems/find-k-pairs-with-smallest-sums/",
+        "difficulty": "Medium",
+        "hint": "Heap seeded with (i, 0)."
+      },
+      {
+        "number": 1192,
+        "title": "Critical Connections in a Network",
+        "url": "https://leetcode.com/problems/critical-connections-in-a-network/",
+        "difficulty": "Hard",
+        "hint": "Tarjan: low-link values find bridges."
+      }
+    ]
+  },
+  {
+    "day": 60,
+    "date": "2026-12-27",
+    "weekday": "Sun",
+    "topic": "🏆 Final Boss 4/4",
+    "problems": [
+      {
+        "number": 32,
+        "title": "Longest Valid Parentheses",
+        "url": "https://leetcode.com/problems/longest-valid-parentheses/",
+        "difficulty": "Hard",
+        "hint": "Stack of indices with a base marker."
+      },
+      {
+        "number": 315,
+        "title": "Count of Smaller Numbers After Self",
+        "url": "https://leetcode.com/problems/count-of-smaller-numbers-after-self/",
+        "difficulty": "Hard",
+        "hint": "Merge sort counting, or a Fenwick tree."
+      },
+      {
+        "number": 407,
+        "title": "Trapping Rain Water II",
+        "url": "https://leetcode.com/problems/trapping-rain-water-ii/",
+        "difficulty": "Hard",
+        "hint": "Min-heap from the border inward."
+      }
+    ]
+  }
+]

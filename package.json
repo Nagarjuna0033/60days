@@ -1,0 +1,20 @@
+{
+  "name": "60-day-prep",
+  "version": "1.0.0",
+  "private": true,
+  "description": "60 Day Prep: daily DSA problems, progress tracking, leaderboard and solutions for a small study group",
+  "type": "module",
+  "scripts": {
+    "dev": "node dev.js"
+  },
+  "engines": {
+    "node": ">=20"
+  },
+  "dependencies": {
+    "@neondatabase/serverless": "^0.10.4",
+    "bcryptjs": "^2.4.3"
+  },
+  "devDependencies": {
+    "@electric-sql/pglite": "^0.2.17"
+  }
+}

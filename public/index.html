@@ -1,0 +1,556 @@
+<!doctype html>
+<html lang="en">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width,initial-scale=1,viewport-fit=cover">
+<title>60 Day Prep</title>
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Plus+Jakarta+Sans:wght@400;500;600;700;800&family=JetBrains+Mono:wght@400;500&display=swap">
+<style>
+:root {
+  color-scheme: light;
+  --bg: #f5f8fc; --card: #ffffff; --line: #e2e8f0; --line-2: #eef2f7; --fg: #0f1d33; --muted: #64748b; --faint: #94a3b8;
+  --blue: #2563eb; --blue-soft: #dbeafe; --blue-ink: #1e40af;
+  --easy: #15803d; --easy-bg: #dcfce7; --med: #b45309; --med-bg: #fef3c7; --hard: #b91c1c; --hard-bg: #fee2e2;
+  --fire: #ea580c; --code-bg: #f8fafc;
+  --sans: "Plus Jakarta Sans", system-ui, -apple-system, "Segoe UI", sans-serif;
+  --mono: "JetBrains Mono", ui-monospace, SFMono-Regular, Menlo, monospace;
+}
+* { box-sizing: border-box; }
+body { margin: 0; background: var(--bg); color: var(--fg); font: 15px/1.6 var(--sans); }
+body::before { content: ""; position: fixed; inset: 0 0 auto; height: env(safe-area-inset-top, 0px); z-index: 10; background: var(--card); }
+a { color: var(--blue); }
+button { font: inherit; color: inherit; cursor: pointer; }
+button:focus-visible, a:focus-visible, textarea:focus-visible, input:focus-visible { outline: 2px solid var(--blue); outline-offset: 2px; }
+[hidden] { display: none !important; }
+.wrap { max-width: 1120px; margin: 0 auto; padding-left: max(16px, env(safe-area-inset-left, 0px)); padding-right: max(16px, env(safe-area-inset-right, 0px)); }
+header { position: sticky; top: env(safe-area-inset-top, 0px); z-index: 5; background: var(--card); border-bottom: 1px solid var(--line); }
+.hbar { display: flex; align-items: center; gap: 16px; padding-block: 12px; }
+.brand { font-weight: 800; font-size: 18px; letter-spacing: -.01em; }
+.brand span { color: var(--blue); }
+.hmeta { margin-left: auto; display: flex; align-items: center; gap: 14px; font-size: 13px; color: var(--muted); font-variant-numeric: tabular-nums; }
+.clock { font-family: var(--mono); font-size: 12px; color: var(--blue-ink); background: var(--blue-soft); padding: 3px 10px; border-radius: 999px; white-space: nowrap; }
+@media (max-width: 520px) { .hdate { display: none; } }
+.av { width: 30px; height: 30px; border-radius: 50%; flex-shrink: 0; display: grid; place-items: center; font-size: 12px; font-weight: 700; color: #fff; text-transform: uppercase; }
+.me-btn { border: 0; padding: 0; background: none; border-radius: 50%; }
+.menu-wrap { position: relative; }
+.menu { position: absolute; right: 0; top: 40px; min-width: 190px; background: var(--card); border: 1px solid var(--line); border-radius: 12px; box-shadow: 0 10px 30px rgba(15, 29, 51, .12); padding: 6px; z-index: 20; }
+.menu .who { padding: 8px 10px 6px; font-weight: 700; color: var(--fg); border-bottom: 1px solid var(--line-2); margin-bottom: 4px; }
+.menu button { display: block; width: 100%; text-align: left; border: 0; background: none; padding: 8px 10px; border-radius: 8px; font-size: 14px; }
+.menu button:hover { background: var(--bg); }
+main { display: grid; grid-template-columns: minmax(0, 1fr) 330px; gap: 20px; padding-block: 20px 48px; align-items: start; }
+@media (max-width: 880px) { main { grid-template-columns: minmax(0, 1fr); } }
+.col { display: flex; flex-direction: column; gap: 14px; min-width: 0; }
+.card { background: var(--card); border: 1px solid var(--line); border-radius: 16px; }
+.hero { padding: 20px 22px; display: flex; justify-content: space-between; align-items: center; gap: 16px; }
+.eyebrow { font-size: 12px; font-weight: 600; color: var(--muted); letter-spacing: .06em; text-transform: uppercase; }
+h1 { font-weight: 800; font-size: 34px; line-height: 1.1; margin: 4px 0 0; letter-spacing: -.02em; }
+h1 small { color: var(--faint); font-size: 18px; font-weight: 700; }
+.ring { --p: 0; width: 76px; height: 76px; border-radius: 50%; flex-shrink: 0; background: conic-gradient(var(--blue) calc(var(--p) * 1%), var(--line) 0); display: grid; place-items: center; transition: background .3s; }
+.ring div { width: 60px; height: 60px; border-radius: 50%; background: var(--card); display: grid; place-items: center; font-weight: 800; font-size: 16px; font-variant-numeric: tabular-nums; }
+.ring.full { --p: 100; background: conic-gradient(var(--easy) 100%, var(--line) 0); }
+.stats { display: grid; grid-template-columns: repeat(3, minmax(0, 1fr)); gap: 12px; }
+.stat { padding: 12px 14px; }
+.stat small { display: block; font-size: 12px; color: var(--muted); font-weight: 500; }
+.stat b { display: block; font-size: 24px; font-weight: 800; line-height: 1.25; font-variant-numeric: tabular-nums; }
+.stat .fire { color: var(--fire); } .stat .rank { color: var(--blue); }
+.strip { display: flex; gap: 6px; overflow-x: auto; padding: 2px 2px 8px; scrollbar-width: thin; }
+.chip { flex: 0 0 auto; width: 38px; height: 38px; border-radius: 10px; border: 1px solid var(--line); background: var(--card); font: 600 13px var(--sans); display: grid; place-items: center; position: relative; font-variant-numeric: tabular-nums; }
+.chip.part { background: var(--blue-soft); border-color: transparent; color: var(--blue-ink); }
+.chip.done { background: var(--blue); border-color: transparent; color: #fff; }
+.chip.sel { outline: 2px solid var(--fg); outline-offset: 1px; }
+.chip.lock { color: var(--faint); background: transparent; border-style: dashed; cursor: not-allowed; }
+.chip.today::after { content: ""; position: absolute; bottom: 3px; width: 4px; height: 4px; border-radius: 50%; background: var(--fire); }
+.list-head { display: flex; justify-content: space-between; align-items: center; padding: 14px 18px; border-bottom: 1px solid var(--line-2); gap: 12px; flex-wrap: wrap; }
+.list-head h2 { margin: 0; font-size: 16px; font-weight: 700; }
+.list-head span { font-size: 13px; color: var(--muted); }
+.prob { padding: 14px 18px; border-bottom: 1px solid var(--line-2); }
+.prob:last-of-type { border-bottom: 0; }
+.prow { display: grid; grid-template-columns: 40px 28px minmax(0, 1fr) auto; gap: 10px; align-items: center; }
+.tick { width: 34px; height: 34px; border-radius: 50%; border: 2px solid #cbd5e1; background: var(--card); display: grid; place-items: center; padding: 0; transition: background .15s, border-color .15s; }
+.tick svg { width: 18px; height: 18px; stroke: transparent; }
+.tick:hover svg { stroke: #cbd5e1; }
+.tick.on { background: var(--easy); border-color: var(--easy); }
+.tick.on svg { stroke: #fff; }
+.pos { font-size: 20px; text-align: center; }
+.ptitle { display: flex; align-items: baseline; gap: 8px; flex-wrap: wrap; min-width: 0; }
+.ptitle a { font-weight: 700; font-size: 16px; color: var(--fg); text-decoration: none; }
+.ptitle a:hover { color: var(--blue); text-decoration: underline; }
+.prob.solved .ptitle a { color: var(--faint); text-decoration: line-through; }
+.lc { font: 12px var(--mono); color: var(--faint); }
+.diff { font-size: 12px; font-weight: 600; padding: 3px 10px; border-radius: 999px; white-space: nowrap; }
+.d-Easy { background: var(--easy-bg); color: var(--easy); } .d-Medium { background: var(--med-bg); color: var(--med); } .d-Hard { background: var(--hard-bg); color: var(--hard); }
+.pbody { margin-left: 50px; }
+@media (max-width: 520px) { .pbody { margin-left: 0; } }
+.hint { margin: 6px 0 0; color: var(--muted); font-size: 14px; }
+.links { display: flex; gap: 8px; margin-top: 10px; flex-wrap: wrap; }
+.pill-btn { border: 1px solid var(--line); background: var(--card); border-radius: 999px; padding: 4px 12px; font-size: 13px; font-weight: 600; color: var(--muted); }
+.pill-btn:hover { border-color: #cbd5e1; color: var(--fg); }
+.pill-btn[aria-expanded="true"] { background: var(--blue-soft); border-color: transparent; color: var(--blue-ink); }
+.sub { margin-top: 12px; padding: 14px 16px; border-radius: 12px; background: var(--bg); border: 1px solid var(--line-2); }
+.sub p { margin: 0 0 8px; }
+.sub .k { font-size: 12px; font-weight: 700; color: var(--muted); text-transform: uppercase; letter-spacing: .05em; margin-right: 6px; }
+pre { margin: 10px 0; padding: 12px 14px; background: var(--card); border: 1px solid var(--line); border-radius: 10px; overflow-x: auto; font: 13px/1.55 var(--mono); }
+.gotcha { font-size: 14px; color: var(--muted); }
+.note { font-size: 13px; color: var(--muted); margin: 0; }
+.cmt { display: flex; gap: 10px; padding: 8px 0; border-bottom: 1px solid var(--line); }
+.cmt:last-of-type { border-bottom: 0; }
+.cmt .who { font-weight: 700; font-size: 13px; }
+.cmt .when { font-size: 12px; color: var(--faint); margin-left: 6px; }
+.cmt .del { border: 0; background: none; color: var(--faint); font-size: 12px; margin-left: 6px; padding: 0; }
+.cmt .del:hover { color: var(--hard); }
+.cmt .txt { font-size: 14px; white-space: pre-wrap; overflow-wrap: anywhere; margin: 2px 0 0; }
+.compose { display: flex; gap: 8px; margin-top: 10px; align-items: flex-end; }
+.compose textarea { flex: 1; min-width: 0; resize: vertical; min-height: 40px; padding: 8px 10px; border-radius: 10px; border: 1px solid var(--line); background: var(--card); color: var(--fg); font: 14px/1.4 var(--sans); }
+.btn { border: 0; border-radius: 10px; padding: 9px 16px; background: var(--blue); color: #fff; font-weight: 700; font-size: 14px; }
+.btn[disabled] { opacity: .6; cursor: default; }
+.btn.ghost { background: var(--card); color: var(--fg); border: 1px solid var(--line); }
+.btn.danger { background: var(--card); color: var(--hard); border: 1px solid var(--hard-bg); }
+.btn.sm { padding: 5px 10px; font-size: 13px; }
+.foot { padding: 12px 18px; font-size: 13px; color: var(--muted); border-top: 1px solid var(--line-2); background: #fafcff; border-radius: 0 0 16px 16px; }
+.side { padding: 16px 18px; }
+.side h2 { font-size: 16px; font-weight: 700; margin: 0 0 8px; }
+.lb-row { display: grid; grid-template-columns: 22px 30px minmax(0, 1fr) auto auto; gap: 10px; align-items: center; padding: 9px 0; border-top: 1px solid var(--line-2); font-size: 14px; font-variant-numeric: tabular-nums; }
+.lb-row:first-of-type { border-top: 0; }
+.lb-row .rk { font-weight: 700; color: var(--faint); text-align: center; }
+.lb-row:nth-of-type(1) .rk { color: #ca8a04; } .lb-row:nth-of-type(2) .rk { color: #64748b; } .lb-row:nth-of-type(3) .rk { color: #b45309; }
+.lb-row .nm { overflow: hidden; text-overflow: ellipsis; white-space: nowrap; font-weight: 600; }
+.lb-row .st { font-size: 13px; color: var(--fire); font-weight: 700; }
+.lb-row .tot { font-weight: 800; min-width: 28px; text-align: right; }
+.lb-row.mine { background: linear-gradient(90deg, var(--blue-soft), transparent); border-radius: 10px; }
+.wk { display: grid; grid-template-columns: 46px minmax(0, 1fr) auto; gap: 8px; padding: 7px 0; font-size: 14px; align-items: center; border-top: 1px solid var(--line-2); }
+.wk:first-of-type { border-top: 0; }
+.wk .n { font-size: 12px; font-weight: 700; color: var(--faint); }
+.wk.now .t { font-weight: 700; } .wk.now .n { color: var(--blue); }
+.wk.later .t { color: var(--faint); }
+.wk.past .t { color: var(--muted); }
+.wk .s { font: 12px var(--mono); color: var(--faint); }
+.rules { margin: 0; padding-left: 18px; font-size: 14px; color: var(--muted); }
+.rules li { margin: 4px 0; }
+.empty { font-size: 14px; color: var(--faint); margin: 0; }
+.login { min-height: 100vh; display: grid; place-items: center; padding: 24px 16px; }
+.login .card { width: 100%; max-width: 360px; padding: 28px 24px; }
+.login .brand { font-size: 24px; margin-bottom: 4px; }
+.login p { margin: 0 0 18px; color: var(--muted); font-size: 14px; }
+label { display: block; font-size: 13px; font-weight: 600; margin: 12px 0 6px; }
+.field { width: 100%; padding: 10px 12px; border-radius: 10px; border: 1px solid var(--line); background: var(--card); color: var(--fg); font: 15px var(--sans); }
+.field.pin { font-family: var(--mono); letter-spacing: .4em; }
+.err { color: var(--hard); font-size: 13px; margin: 10px 0 0; min-height: 1em; }
+.ok { color: var(--easy); font-size: 13px; margin: 10px 0 0; }
+.login .btn { width: 100%; margin-top: 18px; padding: 11px; }
+dialog { border: 1px solid var(--line); border-radius: 16px; padding: 0; width: min(440px, calc(100vw - 32px)); color: var(--fg); background: var(--card); }
+dialog::backdrop { background: rgba(15, 29, 51, .35); }
+.dlg-head { display: flex; justify-content: space-between; align-items: center; padding: 14px 18px; border-bottom: 1px solid var(--line-2); }
+.dlg-head h2 { margin: 0; font-size: 16px; }
+.dlg-head button { border: 0; background: none; font-size: 20px; color: var(--muted); line-height: 1; }
+.dlg-body { padding: 14px 18px 18px; max-height: 70vh; overflow-y: auto; }
+.mem { display: grid; grid-template-columns: 30px minmax(0, 1fr) auto; gap: 10px; align-items: center; padding: 8px 0; border-top: 1px solid var(--line-2); }
+.mem:first-of-type { border-top: 0; }
+.mem .nm { font-weight: 600; overflow: hidden; text-overflow: ellipsis; white-space: nowrap; }
+.mem .nm small { color: var(--faint); font-weight: 500; margin-left: 6px; }
+.mem .acts { display: flex; gap: 6px; }
+.add-row { display: grid; grid-template-columns: minmax(0, 1fr) 96px auto; gap: 8px; align-items: end; margin-top: 6px; }
+.section-t { font-size: 12px; font-weight: 700; color: var(--muted); text-transform: uppercase; letter-spacing: .05em; margin: 18px 0 4px; }
+@media (prefers-reduced-motion: reduce) { * { transition: none !important; } }
+</style>
+</head>
+<body>
+
+<div class="login" id="loginView" hidden>
+  <form class="card" id="loginForm" autocomplete="on">
+    <div class="brand">60 Day <span>Prep</span></div>
+    <p>Log in with your name and 4-digit PIN.</p>
+    <label for="lName">Name</label>
+    <input class="field" id="lName" name="username" autocomplete="username" required>
+    <label for="lPin">PIN</label>
+    <input class="field pin" id="lPin" name="password" type="password" inputmode="numeric" pattern="\d{4}" maxlength="4" autocomplete="current-password" required>
+    <p class="err" id="lErr" role="alert"></p>
+    <button class="btn" type="submit" id="lBtn">Log in</button>
+  </form>
+</div>
+
+<div id="appView" hidden>
+  <header>
+    <div class="wrap hbar">
+      <div class="brand">60 Day <span>Prep</span></div>
+      <div class="hmeta">
+        <span class="hdate" id="hDate"></span>
+        <span class="clock" id="hNext" title="Time until the next day opens"></span>
+        <div class="menu-wrap">
+          <button class="me-btn" id="meBtn" aria-haspopup="true" aria-expanded="false" aria-label="Account menu"></button>
+          <div class="menu" id="menu" hidden>
+            <div class="who" id="menuName"></div>
+            <button id="mMembers" hidden>Members</button>
+            <button id="mPin">Change PIN</button>
+            <button id="mLogout">Log out</button>
+          </div>
+        </div>
+      </div>
+    </div>
+  </header>
+
+  <div class="wrap">
+    <main>
+      <div class="col">
+        <section class="card hero" id="hero"></section>
+        <section class="stats" id="stats"></section>
+        <nav class="strip" id="strip" aria-label="Days"></nav>
+        <section class="card" id="day"></section>
+      </div>
+      <aside class="col">
+        <section class="card side">
+          <h2>Leaderboard</h2>
+          <div id="lb"></div>
+        </section>
+        <section class="card side">
+          <h2>Roadmap</h2>
+          <div id="road"></div>
+        </section>
+        <section class="card side">
+          <h2>House rules</h2>
+          <ol class="rules">
+            <li>Tick 🚶 🏃 🚀 as you solve each problem</li>
+            <li>Try for 30 minutes before opening the hint or solution</li>
+            <li>Discussion opens once you solve a problem, so no spoilers</li>
+            <li>Missed a day? Catch up, don't skip</li>
+          </ol>
+        </section>
+      </aside>
+    </main>
+  </div>
+</div>
+
+<dialog id="pinDlg">
+  <form method="dialog" id="pinForm">
+    <div class="dlg-head"><h2>Change PIN</h2><button type="button" data-close aria-label="Close">×</button></div>
+    <div class="dlg-body">
+      <label for="newPin">New 4-digit PIN</label>
+      <input class="field pin" id="newPin" type="password" inputmode="numeric" pattern="\d{4}" maxlength="4" autocomplete="new-password" required>
+      <p class="err" id="pinMsg" role="status"></p>
+      <button class="btn" type="submit" style="margin-top:12px">Save PIN</button>
+    </div>
+  </form>
+</dialog>
+
+<dialog id="memDlg">
+  <div class="dlg-head"><h2>Members</h2><button type="button" data-close aria-label="Close">×</button></div>
+  <div class="dlg-body">
+    <div id="memList"></div>
+    <div class="section-t">Add a member</div>
+    <form class="add-row" id="addForm">
+      <div><label for="aName">Name</label><input class="field" id="aName" autocomplete="off" required maxlength="40"></div>
+      <div><label for="aPin">PIN</label><input class="field pin" id="aPin" inputmode="numeric" pattern="\d{4}" maxlength="4" autocomplete="off" required></div>
+      <button class="btn" type="submit">Add</button>
+    </form>
+    <p class="err" id="memMsg" role="status"></p>
+  </div>
+</dialog>
+
+<script>
+const POS = ["🚶", "🏃", "🚀"];
+const DIFF = { Easy: "🌱", Medium: "🔥", Hard: "💀" };
+const START = Date.UTC(2026, 9, 29, 0, 30);
+const DAYMS = 864e5;
+const WEEKS = [
+  [1, 7, "Arrays, hashing, prefix sums"], [8, 14, "Two pointers, sliding window, strings"],
+  [15, 21, "Stack, monotonic stack, binary search"], [22, 28, "Linked lists, trees, BST"],
+  [29, 35, "Advanced trees, heaps, intervals, greedy"], [36, 42, "Graphs: BFS/DFS, topo sort, union-find, Dijkstra"],
+  [43, 50, "Backtracking, 1D and 2D DP"], [51, 56, "Advanced DP, tries, design"], [57, 60, "🏆 Final boss"],
+];
+const COLORS = ["#2563eb", "#ea580c", "#15803d", "#9333ea", "#db2777", "#0891b2", "#b45309", "#4f46e5"];
+
+let BANK = [];
+const S = { cur: 1, sel: 1, me: null, uid: null, users: {}, solves: {}, mine: {}, sols: {}, comments: {}, open: {}, drafts: {}, writing: Promise.resolve(), pendingSolves: 0 };
+
+const $ = id => document.getElementById(id);
+function currentDay() { return Math.min(60, Math.max(1, Math.floor((Date.now() - START) / DAYMS) + 1)); }
+function el(tag, attrs, ...kids) {
+  const e = document.createElement(tag);
+  for (const [k, v] of Object.entries(attrs || {})) {
+    if (k === "class") e.className = v; else if (k.startsWith("on")) e.addEventListener(k.slice(2), v);
+    else if (v !== false && v != null) e.setAttribute(k, v === true ? "" : v);
+  }
+  for (const k of kids.flat()) if (k != null) e.append(k.nodeType ? k : document.createTextNode(String(k)));
+  return e;
+}
+const CHECK = '<svg viewBox="0 0 24 24" fill="none" stroke-width="3" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M5 12.5l4.5 4.5L19 7.5"/></svg>';
+function dateLabel(iso) { const [y, m, d] = iso.split("-").map(Number); return new Date(Date.UTC(y, m - 1, d)).toLocaleDateString("en-IN", { weekday: "short", day: "numeric", month: "short", timeZone: "UTC" }); }
+function ago(ts) { const s = (Date.now() - ts) / 1000; if (s < 60) return "just now"; if (s < 3600) return Math.floor(s / 60) + "m ago"; if (s < 86400) return Math.floor(s / 3600) + "h ago"; return Math.floor(s / 86400) + "d ago"; }
+const pad = n => String(n).padStart(2, "0");
+function initials(name) { const w = String(name || "?").trim().split(/\s+/); return ((w[0] || "?")[0] + (w.length > 1 ? w[w.length - 1][0] : "")).toUpperCase(); }
+function avatar(id, name) { return el("span", { class: "av", style: `background:${COLORS[Number(id) % COLORS.length]}`, "aria-hidden": "true" }, initials(name)); }
+const nameOf = id => S.users[id] || "Someone";
+
+async function api(path, opts = {}) {
+  const res = await fetch(path, { credentials: "same-origin", ...opts, headers: { "Content-Type": "application/json", ...(opts.headers || {}) }, body: opts.body ? JSON.stringify(opts.body) : undefined });
+  let data = {}; try { data = await res.json(); } catch {}
+  if (res.status === 401 && path !== "/api/login") { showLogin(); throw Object.assign(new Error("logged out"), { status: 401 }); }
+  if (!res.ok) throw Object.assign(new Error(data.error || "Something went wrong."), { status: res.status });
+  return data;
+}
+
+function mySolved(day) { return S.mine[day] || [false, false, false]; }
+function solvedCount(days) { let n = 0; for (const k in days) n += (days[k] || []).filter(Boolean).length; return n; }
+function streak(days) {
+  let d = S.cur; if (!(days[d] || []).some(Boolean)) d--;
+  let n = 0; while (d >= 1 && (days[d] || []).some(Boolean)) { n++; d--; } return n;
+}
+function board() {
+  return Object.entries(S.solves).filter(([id]) => S.users[id]).map(([id, days]) => ({ id, total: solvedCount(days), st: streak(days) })).filter(r => r.total > 0)
+    .sort((a, b) => b.total - a.total || b.st - a.st);
+}
+
+function renderClock() {
+  const next = Math.max(0, START + S.cur * DAYMS - Date.now());
+  const h = Math.floor(next / 36e5), m = Math.floor(next % 36e5 / 6e4), s = Math.floor(next % 6e4 / 1e3);
+  $("hNext").textContent = Date.now() < START ? "Starts 29 Oct, 6 AM" : S.cur < 60 ? `Next day in ${pad(h)}:${pad(m)}:${pad(s)}` : "Final day";
+}
+
+function renderHero() {
+  const d = BANK[S.sel - 1], n = mySolved(d.day).filter(Boolean).length;
+  $("hDate").textContent = dateLabel(BANK[S.cur - 1].date);
+  const ring = el("div", { class: "ring" + (n === 3 ? " full" : ""), style: `--p:${Math.round(n / 3 * 100)}`, role: "img", "aria-label": `${n} of 3 solved` }, el("div", {}, `${n}/3`));
+  $("hero").replaceChildren(
+    el("div", { style: "min-width:0" },
+      el("div", { class: "eyebrow" }, `Week ${Math.min(9, Math.ceil(d.day / 7))} · ${d.topic}`),
+      el("h1", {}, `Day ${d.day} `, el("small", {}, "/ 60")),
+      el("div", { style: "font-size:13px;color:var(--muted);margin-top:2px" }, d.day === S.cur ? `Today · ${dateLabel(d.date)}` : dateLabel(d.date))),
+    ring);
+}
+
+function renderStats() {
+  const rows = board(), rank = rows.findIndex(r => r.id === S.uid);
+  $("stats").replaceChildren(
+    el("div", { class: "card stat" }, el("small", {}, "Solved"), el("b", {}, `${solvedCount(S.mine)}`, el("span", { style: "font-size:14px;color:var(--faint);font-weight:600" }, " / 180"))),
+    el("div", { class: "card stat" }, el("small", {}, "Streak"), el("b", { class: "fire" }, `🔥 ${streak(S.mine)}d`)),
+    el("div", { class: "card stat" }, el("small", {}, "Rank"), el("b", { class: "rank" }, rank >= 0 ? `#${rank + 1}` : "–")));
+}
+
+function renderStrip() {
+  const strip = $("strip"); strip.replaceChildren();
+  for (const d of BANK) {
+    const n = mySolved(d.day).filter(Boolean).length, lock = d.day > S.cur;
+    const cls = ["chip", lock ? "lock" : n === 3 ? "done" : n ? "part" : "", d.day === S.sel ? "sel" : "", d.day === S.cur ? "today" : ""].join(" ");
+    strip.append(el("button", { class: cls, "aria-label": `Day ${d.day}${lock ? ", locked" : ""}`, "aria-current": d.day === S.sel ? "true" : null, disabled: lock,
+      onclick: () => { S.sel = d.day; render(); } }, d.day));
+  }
+  const s = strip.querySelector(".sel");
+  if (s && S.scrolledTo !== S.sel) { S.scrolledTo = S.sel; strip.scrollLeft = s.offsetLeft - strip.clientWidth / 2 + s.clientWidth / 2; }
+}
+
+function renderDay() {
+  const d = BANK[S.sel - 1], box = $("day"), solved = mySolved(d.day);
+  const focused = document.activeElement && document.activeElement.id;
+  box.replaceChildren(el("div", { class: "list-head" }, el("h2", {}, d.day === S.cur ? "Today's problems" : `Day ${d.day} problems`), el("span", {}, `${solved.filter(Boolean).length} of 3 solved`)));
+  const sol = S.sols[d.day];
+  d.problems.forEach((p, i) => {
+    const on = !!solved[i], key = d.day + ":" + i;
+    const tick = el("button", { class: "tick" + (on ? " on" : ""), "aria-pressed": on ? "true" : "false", "aria-label": `Mark ${p.title} ${on ? "unsolved" : "solved"}`, onclick: () => toggle(d.day, i) });
+    tick.innerHTML = CHECK;
+    const cs = S.comments[key] || [];
+    const row = el("div", { class: "prow" }, tick, el("div", { class: "pos", "aria-hidden": "true" }, POS[i]),
+      el("div", { class: "ptitle" }, el("a", { href: p.url, target: "_blank", rel: "noopener" }, p.title), el("span", { class: "lc" }, "LC " + p.number)),
+      el("span", { class: "diff d-" + p.difficulty }, `${DIFF[p.difficulty]} ${p.difficulty}`));
+    const body = el("div", { class: "pbody" }, el("p", { class: "hint" }, "💡 " + p.hint));
+    body.append(el("div", { class: "links" },
+      el("button", { class: "pill-btn", "aria-expanded": S.open[key] === "sol" ? "true" : "false", onclick: () => { S.open[key] = S.open[key] === "sol" ? null : "sol"; renderDay(); } }, sol ? "Solution" : "Solution 🔒"),
+      el("button", { class: "pill-btn", "aria-expanded": S.open[key] === "dis" ? "true" : "false", onclick: () => { S.open[key] = S.open[key] === "dis" ? null : "dis"; renderDay(); } }, `Discussion · ${cs.length}`)));
+    if (S.open[key] === "sol") body.append(solutionView(sol, i, d.day));
+    if (S.open[key] === "dis") body.append(discussionView(key, on, cs));
+    box.append(el("div", { class: "prob" + (on ? " solved" : "") }, row, body));
+  });
+  box.append(el("div", { class: "foot" }, sol ? "Solutions are out for this day." : d.day === S.cur ? "Solutions unlock tomorrow at 6 AM." : "Solutions are on their way."));
+  if (focused && focused.startsWith("c-")) { const ta = $(focused); if (ta) { ta.focus(); ta.selectionStart = ta.selectionEnd = ta.value.length; } }
+}
+
+function solutionView(sol, i, day) {
+  const it = sol && sol.items && sol.items[i];
+  if (!it) return el("div", { class: "sub" }, el("p", { class: "note" }, day === S.cur ? "Unlocks tomorrow at 6 AM. Give it your best shot first." : "Not posted yet."));
+  return el("div", { class: "sub" },
+    el("p", {}, el("span", { class: "k" }, "Approach"), it.approach || ""),
+    el("p", {}, el("span", { class: "k" }, "Complexity"), `Time ${it.time || "?"} · Space ${it.space || "?"}`),
+    el("pre", {}, el("code", {}, it.code || "")),
+    it.gotcha ? el("p", { class: "gotcha" }, "⚠️ " + it.gotcha) : null);
+}
+
+function discussionView(key, solved, cs) {
+  const box = el("div", { class: "sub" });
+  if (!solved) { box.append(el("p", { class: "note" }, `Solve it first to see ${cs.length ? cs.length + " comment" + (cs.length > 1 ? "s" : "") : "the discussion"}. No spoilers.`)); return box; }
+  if (!cs.length) box.append(el("p", { class: "note" }, "No comments yet. Share your approach."));
+  const list = el("div", {});
+  for (const c of cs) {
+    const canDel = c.user_id === S.me.id || S.me.is_admin;
+    list.append(el("div", { class: "cmt" }, avatar(c.user_id, nameOf(c.user_id)), el("div", { style: "min-width:0" },
+      el("span", { class: "who" }, nameOf(c.user_id)), el("span", { class: "when" }, ago(Number(c.at))),
+      canDel ? el("button", { class: "del", onclick: () => deleteComment(c.id) }, "Delete") : null,
+      el("p", { class: "txt" }, c.t))));
+  }
+  box.append(list);
+  const ta = el("textarea", { id: "c-" + key.replace(":", "-"), rows: "2", maxlength: "2000", placeholder: "Used a hashmap, O(n). Watch out for duplicates.", "aria-label": "Your comment", oninput: e => { S.drafts[key] = e.target.value; } });
+  ta.value = S.drafts[key] || "";
+  box.append(el("div", { class: "compose" }, ta, el("button", { class: "btn", onclick: () => postComment(key) }, "Post")));
+  return box;
+}
+
+function renderLeaderboard() {
+  const rows = board();
+  if (!rows.length) { $("lb").replaceChildren(el("p", { class: "empty" }, "Tick a problem to get on the board.")); return; }
+  $("lb").replaceChildren(...rows.map((r, i) => el("div", { class: "lb-row" + (r.id === S.uid ? " mine" : "") },
+    el("span", { class: "rk" }, i + 1), avatar(r.id, nameOf(r.id)),
+    el("span", { class: "nm" }, nameOf(r.id) + (r.id === S.uid ? " (you)" : "")),
+    el("span", { class: "st", title: "Day streak" }, r.st ? "🔥 " + r.st : ""), el("span", { class: "tot" }, r.total))));
+}
+
+function renderRoad() {
+  const box = $("road"); box.replaceChildren();
+  WEEKS.forEach(([a, b, t], i) => {
+    let done = 0; for (let d = a; d <= b; d++) done += mySolved(d).filter(Boolean).length;
+    const state = S.cur > b ? "past" : S.cur >= a ? "now" : "later";
+    box.append(el("div", { class: "wk " + state }, el("span", { class: "n" }, i < 8 ? "Wk " + (i + 1) : "57–60"), el("span", { class: "t" }, t), el("span", { class: "s" }, `${done}/${(b - a + 1) * 3}`)));
+  });
+}
+
+function render() { renderClock(); renderHero(); renderStats(); renderStrip(); renderDay(); renderRoad(); renderLeaderboard(); }
+
+function applyState(st) {
+  S.me = st.me; S.uid = String(st.me.id); S.users = st.users;
+  S.sols = st.solutions;
+  if (!S.pendingSolves) S.mine = st.solves[S.uid] || {};
+  S.solves = { ...st.solves, [S.uid]: S.mine };
+  const m = {};
+  for (const c of st.comments) (m[c.d + ":" + c.p] ||= []).push(c);
+  S.comments = m;
+}
+
+async function refresh() {
+  try { applyState(await api("/api/state")); render(); } catch (e) { if (e.status !== 401) console.warn(e); }
+}
+
+function queueWrite(fn) { S.writing = S.writing.then(fn).catch(e => { if (e.status !== 401) alert(e.message); }); return S.writing; }
+
+function toggle(day, i) {
+  const arr = [...mySolved(day)]; arr[i] = !arr[i];
+  S.mine = { ...S.mine, [day]: arr }; S.solves = { ...S.solves, [S.uid]: S.mine };
+  render();
+  const snapshot = S.mine;
+  S.pendingSolves++;
+  queueWrite(() => api("/api/solves", { method: "PUT", body: { days: snapshot } })).finally(() => { S.pendingSolves--; });
+}
+
+async function postComment(key) {
+  const t = (S.drafts[key] || "").trim(); if (!t) return;
+  const [d, p] = key.split(":").map(Number);
+  try { await api("/api/comments", { method: "POST", body: { d, p, t } }); S.drafts[key] = ""; await refresh(); }
+  catch (e) { if (e.status !== 401) alert(e.message); }
+}
+
+async function deleteComment(id) {
+  if (!confirm("Delete this comment?")) return;
+  try { await api("/api/comments/" + id, { method: "DELETE" }); await refresh(); } catch (e) { if (e.status !== 401) alert(e.message); }
+}
+
+function showLogin() {
+  stopPolling();
+  $("appView").hidden = true; $("loginView").hidden = false;
+  $("lName").focus();
+}
+
+async function showApp() {
+  $("loginView").hidden = true; $("appView").hidden = false;
+  S.cur = S.sel = currentDay();
+  await refresh();
+  $("meBtn").replaceChildren(avatar(S.me.id, S.me.name));
+  $("menuName").textContent = S.me.name;
+  $("mMembers").hidden = !S.me.is_admin;
+  startPolling();
+}
+
+let pollTimer = null;
+function startPolling() { stopPolling(); pollTimer = setInterval(() => { if (!document.hidden) refresh(); }, 20000); }
+function stopPolling() { if (pollTimer) clearInterval(pollTimer); pollTimer = null; }
+document.addEventListener("visibilitychange", () => { if (!document.hidden && pollTimer) refresh(); });
+
+$("loginForm").addEventListener("submit", async e => {
+  e.preventDefault();
+  $("lErr").textContent = ""; $("lBtn").disabled = true;
+  try {
+    await api("/api/login", { method: "POST", body: { name: $("lName").value, pin: $("lPin").value } });
+    $("lPin").value = "";
+    await showApp();
+  } catch (err) { $("lErr").textContent = err.message; }
+  finally { $("lBtn").disabled = false; }
+});
+
+function closeMenu() { $("menu").hidden = true; $("meBtn").setAttribute("aria-expanded", "false"); }
+$("meBtn").addEventListener("click", e => { e.stopPropagation(); const open = $("menu").hidden; $("menu").hidden = !open; $("meBtn").setAttribute("aria-expanded", String(open)); });
+document.addEventListener("click", e => { if (!$("menu").contains(e.target)) closeMenu(); });
+document.addEventListener("keydown", e => { if (e.key === "Escape") closeMenu(); });
+document.querySelectorAll("[data-close]").forEach(b => b.addEventListener("click", () => b.closest("dialog").close()));
+
+$("mLogout").addEventListener("click", async () => { closeMenu(); try { await api("/api/logout", { method: "POST" }); } catch {} showLogin(); });
+
+$("mPin").addEventListener("click", () => { closeMenu(); $("newPin").value = ""; $("pinMsg").textContent = ""; $("pinMsg").className = "err"; $("pinDlg").showModal(); });
+$("pinForm").addEventListener("submit", async e => {
+  e.preventDefault();
+  try {
+    await api("/api/me/pin", { method: "PUT", body: { pin: $("newPin").value } });
+    $("pinMsg").className = "ok"; $("pinMsg").textContent = "PIN updated.";
+    setTimeout(() => $("pinDlg").close(), 900);
+  } catch (err) { $("pinMsg").className = "err"; $("pinMsg").textContent = err.message; }
+});
+
+function memMsg(text, ok) { $("memMsg").className = ok ? "ok" : "err"; $("memMsg").textContent = text; }
+
+async function loadMembers() {
+  const { users } = await api("/api/admin/users");
+  $("memList").replaceChildren(...users.map(u => el("div", { class: "mem" }, avatar(u.id, u.name),
+    el("span", { class: "nm" }, u.name, u.is_admin ? el("small", {}, "admin") : null),
+    el("div", { class: "acts" },
+      el("button", { class: "btn ghost sm", onclick: () => resetPin(u) }, "Reset PIN"),
+      u.id === S.me.id ? null : el("button", { class: "btn danger sm", onclick: () => removeMember(u) }, "Remove")))));
+}
+
+async function resetPin(u) {
+  const pin = prompt(`New 4-digit PIN for ${u.name}`);
+  if (pin == null) return;
+  try { await api(`/api/admin/users/${u.id}/pin`, { method: "PUT", body: { pin: pin.trim() } }); memMsg(`PIN reset for ${u.name}.`, true); }
+  catch (e) { memMsg(e.message); }
+}
+
+async function removeMember(u) {
+  if (!confirm(`Remove ${u.name}? Their ticks and comments will be deleted.`)) return;
+  try { await api(`/api/admin/users/${u.id}`, { method: "DELETE" }); memMsg(`${u.name} removed.`, true); await loadMembers(); refresh(); }
+  catch (e) { memMsg(e.message); }
+}
+
+$("mMembers").addEventListener("click", async () => {
+  closeMenu(); memMsg(""); $("memDlg").showModal();
+  try { await loadMembers(); } catch (e) { memMsg(e.message); }
+});
+
+$("addForm").addEventListener("submit", async e => {
+  e.preventDefault();
+  const name = $("aName").value.trim();
+  try {
+    await api("/api/admin/users", { method: "POST", body: { name, pin: $("aPin").value } });
+    $("aName").value = ""; $("aPin").value = "";
+    memMsg(`${name} added. Share the link and their PIN with them.`, true);
+    await loadMembers(); refresh();
+  } catch (err) { memMsg(err.message); }
+});
+
+setInterval(() => {
+  if ($("appView").hidden) return;
+  const c = currentDay();
+  if (c !== S.cur) { if (S.sel === S.cur) S.sel = c; S.cur = c; render(); } else renderClock();
+}, 1000);
+
+(async () => {
+  try { BANK = await (await fetch("/bank.json")).json(); }
+  catch { document.body.textContent = "Couldn't load the problem list. Refresh to try again."; return; }
+  if (BANK.days) BANK = BANK.days;
+  try { await api("/api/me"); await showApp(); } catch (e) { if (e.status !== 401) showLogin(); }
+})();
+</script>
+</body>
+</html>
