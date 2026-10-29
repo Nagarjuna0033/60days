@@ -84,7 +84,7 @@ async function handle(req, res) {
   if (path === "/api/state" && method === "GET") {
     const [users, solves, sols, comments] = await Promise.all([
       q("SELECT id, name, leetcode FROM users ORDER BY id"),
-      q("SELECT user_id, auto FROM solves"),
+      q("SELECT user_id, days FROM solves"),
       q("SELECT day, data FROM solutions"),
       q("SELECT id, user_id, d, p, t, at FROM comments ORDER BY at"),
     ]);
@@ -92,7 +92,7 @@ async function handle(req, res) {
       me,
       users: Object.fromEntries(users.map(u => [u.id, u.name])),
       leetcode: Object.fromEntries(users.filter(u => u.leetcode).map(u => [u.id, u.leetcode])),
-      solves: Object.fromEntries(solves.map(s => [s.user_id, s.auto || {}])),
+      solves: Object.fromEntries(solves.map(s => [s.user_id, s.days || {}])),
       solutions: Object.fromEntries(sols.map(s => [s.day, s.data])),
       comments,
     });
