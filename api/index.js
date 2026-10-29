@@ -176,6 +176,7 @@ export default async function handler(req, res) {
   } catch (e) {
     console.error(e);
     if (e instanceof SyntaxError) return send(res, 400, { error: "Bad JSON." });
+    if (/No database connected/.test(e.message)) return send(res, 503, { error: "The site's database isn't connected yet." });
     send(res, 500, { error: "Something went wrong. Try again." });
   }
 }
