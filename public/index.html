@@ -93,6 +93,13 @@ h1 small { color: var(--faint); font-size: 18px; font-weight: 700; }
 .ptitle a:hover { color: var(--blue); text-decoration: underline; }
 .prob.solved .ptitle a { color: var(--faint); text-decoration: line-through; }
 .lc { font: 12px var(--mono); color: var(--faint); }
+.via { font-size: 11px; font-weight: 700; color: var(--easy); background: var(--easy-bg); padding: 1px 8px; border-radius: 999px; white-space: nowrap; }
+.lb-row .nm a.lcl { display: block; font: 500 12px var(--mono); color: var(--faint); text-decoration: none; overflow: hidden; text-overflow: ellipsis; }
+.lb-row .nm a.lcl:hover { color: var(--blue); }
+.mem .nm a.lcl { font: 500 12px var(--mono); color: var(--faint); margin-left: 6px; }
+.lc-linked { display: flex; align-items: center; gap: 10px; flex-wrap: wrap; }
+.lc-linked a { font: 600 15px var(--mono); }
+.lc-acts { display: flex; gap: 8px; margin-top: 14px; flex-wrap: wrap; }
 .diff { font-size: 12px; font-weight: 600; padding: 3px 10px; border-radius: 999px; white-space: nowrap; }
 .d-Easy { background: var(--easy-bg); color: var(--easy); } .d-Medium { background: var(--med-bg); color: var(--med); } .d-Hard { background: var(--hard-bg); color: var(--hard); }
 .pbody { margin-left: 50px; }
@@ -205,6 +212,7 @@ dialog::backdrop { background: rgba(15, 29, 51, .35); }
           <div class="menu" id="menu" hidden>
             <div class="who" id="menuName"></div>
             <button id="mMembers" hidden>Members</button>
+            <button id="mLc">LeetCode auto-tick</button>
             <button id="mPin">Change PIN</button>
             <button id="mLogout">Log out</button>
           </div>
@@ -254,6 +262,11 @@ dialog::backdrop { background: rgba(15, 29, 51, .35); }
       <button class="btn" type="submit" style="margin-top:12px">Save PIN</button>
     </div>
   </form>
+</dialog>
+
+<dialog id="lcDlg">
+  <div class="dlg-head"><h2>LeetCode auto-tick</h2><button type="button" data-close aria-label="Close">×</button></div>
+  <div class="dlg-body" id="lcBody"></div>
 </dialog>
 
 <dialog id="memDlg">
@@ -392,7 +405,8 @@ function renderDay() {
     tick.innerHTML = CHECK;
     const cs = S.comments[key] || [];
     const row = el("div", { class: "prow" }, tick, el("div", { class: "pos", "aria-hidden": "true" }, POS[i]),
-      el("div", { class: "ptitle" }, el("a", { href: p.url, target: "_blank", rel: "noopener" }, p.title), el("span", { class: "lc" }, "LC " + p.number)),
+      el("div", { class: "ptitle" }, el("a", { href: p.url, target: "_blank", rel: "noopener" }, p.title), el("span", { class: "lc" }, "LC " + p.number),
+        on && (S.auto[d.day] || [])[i] ? el("span", { class: "via", title: "Ticked automatically from your accepted LeetCode submission" }, "via LeetCode") : null),
       el("span", { class: "diff d-" + p.difficulty }, `${DIFF[p.difficulty]} ${p.difficulty}`));
     const body = el("div", { class: "pbody" });
     body.append(el("div", { class: "links" },
@@ -442,9 +456,12 @@ function renderLeaderboard() {
   if (!rows.length) { $("lb").replaceChildren(el("p", { class: "empty" }, "Tick a problem to get on the board.")); return; }
   $("lb").replaceChildren(...rows.map((r, i) => el("div", { class: "lb-row" + (r.id === S.uid ? " mine" : "") },
     el("span", { class: "rk" }, i + 1), avatar(r.id, nameOf(r.id)),
-    el("span", { class: "nm" }, nameOf(r.id) + (r.id === S.uid ? " (you)" : "")),
+    el("span", { class: "nm" }, nameOf(r.id) + (r.id === S.uid ? " (you)" : ""), lcLink(r.id)),
     el("span", { class: "st", title: "Day streak" }, r.st ? "🔥 " + r.st : ""), el("span", { class: "tot" }, r.total))));
 }
+
+function lcUrl(name) { return "https://leetcode.com/u/" + encodeURIComponent(name) + "/"; }
+function lcLink(id) { const n = S.lc[id]; return n ? el("a", { class: "lcl", href: lcUrl(n), target: "_blank", rel: "noopener" }, "@" + n) : null; }
 
 function renderRoad() {
   const box = $("road"); box.replaceChildren();
@@ -461,6 +478,8 @@ function applyState(st) {
   S.me = st.me; S.uid = String(st.me.id); S.users = st.users;
   S.sols = { ...S.fileSols, ...st.solutions };
   if (!S.pendingSolves) S.mine = st.solves[S.uid] || {};
+  S.auto = (st.auto || {})[S.uid] || {};
+  S.lc = st.leetcode || {};
   S.solves = { ...st.solves, [S.uid]: S.mine };
   const m = {};
   for (const c of st.comments) (m[c.d + ":" + c.p] ||= []).push(c);
@@ -480,9 +499,8 @@ function toggle(day, i) {
   const arr = [...mySolved(day)]; arr[i] = !arr[i];
   S.mine = { ...S.mine, [day]: arr }; S.solves = { ...S.solves, [S.uid]: S.mine };
   render();
-  const snapshot = S.mine;
   S.pendingSolves++;
-  queueWrite(() => api("/api/solves", { method: "PUT", body: { days: snapshot } })).finally(() => { S.pendingSolves--; });
+  queueWrite(() => api("/api/solves", { method: "PUT", body: { day, idx: i, value: arr[i] } })).finally(() => { S.pendingSolves--; });
 }
 
 async function postComment(key) {
@@ -564,8 +582,9 @@ function memMsg(text, ok) { $("memMsg").className = ok ? "ok" : "err"; $("memMsg
 async function loadMembers() {
   const { users } = await api("/api/admin/users");
   $("memList").replaceChildren(...users.map(u => el("div", { class: "mem" }, avatar(u.id, u.name),
-    el("span", { class: "nm" }, u.name, u.is_admin ? el("small", {}, "admin") : null),
+    el("span", { class: "nm" }, u.name, u.is_admin ? el("small", {}, "admin") : null, u.leetcode ? el("a", { class: "lcl", href: lcUrl(u.leetcode), target: "_blank", rel: "noopener" }, "@" + u.leetcode) : null),
     el("div", { class: "acts" },
+      u.leetcode ? el("button", { class: "btn ghost sm", onclick: () => adminUnlinkLc(u) }, "Unlink LC") : null,
       el("button", { class: "btn ghost sm", onclick: () => resetPin(u) }, "Reset PIN"),
       u.id === S.me.id ? null : el("button", { class: "btn danger sm", onclick: () => removeMember(u) }, "Remove")))));
 }
@@ -577,11 +596,72 @@ async function resetPin(u) {
   catch (e) { memMsg(e.message); }
 }
 
+async function adminUnlinkLc(u) {
+  if (!confirm(`Unlink ${u.name}'s LeetCode account (@${u.leetcode})?`)) return;
+  try { await api(`/api/admin/users/${u.id}/leetcode`, { method: "DELETE" }); memMsg(`Unlinked ${u.name}'s LeetCode.`, true); await loadMembers(); refresh(); }
+  catch (e) { memMsg(e.message); }
+}
+
 async function removeMember(u) {
   if (!confirm(`Remove ${u.name}? Their ticks and comments will be deleted.`)) return;
   try { await api(`/api/admin/users/${u.id}`, { method: "DELETE" }); memMsg(`${u.name} removed.`, true); await loadMembers(); refresh(); }
   catch (e) { memMsg(e.message); }
 }
+
+function lcMsgEl() { return el("p", { class: "err", id: "lcMsg", role: "status" }); }
+function lcMsg(text, ok) { const m = $("lcMsg"); if (m) { m.className = ok ? "ok" : "err"; m.textContent = text; } }
+function addedText(n) { return n ? `Ticked ${n} problem${n > 1 ? "s" : ""} from LeetCode.` : "Up to date. Nothing new to tick."; }
+
+function renderLc() {
+  const box = $("lcBody"), name = S.me.leetcode;
+  if (!name) {
+    const input = el("input", { class: "field", id: "lcName", placeholder: "your LeetCode username", autocomplete: "off", autocapitalize: "off", spellcheck: "false", maxlength: "80" });
+    box.replaceChildren(
+      el("p", { class: "note" }, "Link your LeetCode account and the problems you get Accepted on LeetCode tick here automatically, within about 10 minutes. Only submissions made after a day opens (6 AM) count."),
+      el("p", { class: "note", style: "margin-top:8px" }, "Your LeetCode username will be shown to the group. Your profile must be public (it is by default)."),
+      el("form", { onsubmit: linkLc }, el("label", { for: "lcName" }, "LeetCode username"), input,
+        el("button", { class: "btn", type: "submit", style: "margin-top:12px" }, "Link account")),
+      lcMsgEl());
+    return;
+  }
+  const last = Number(S.me.lc_last_sync);
+  box.replaceChildren(
+    el("div", { class: "lc-linked" }, el("span", { class: "note" }, "Linked to"), el("a", { href: lcUrl(name), target: "_blank", rel: "noopener" }, "@" + name)),
+    el("p", { class: "note", style: "margin-top:8px" }, S.me.lc_status === "error" ? "Couldn't reach LeetCode on the last try. It will retry automatically." : last ? `Last synced ${ago(last)}. Checks every 10 minutes.` : "Not synced yet. Checks every 10 minutes."),
+    el("p", { class: "note", style: "margin-top:8px" }, "Auto-sync only adds ticks. Untick anything by hand and it stays unticked."),
+    el("div", { class: "lc-acts" },
+      el("button", { class: "btn", id: "lcSync", onclick: syncLc }, "Sync now"),
+      el("button", { class: "btn ghost", onclick: unlinkLc }, "Unlink")),
+    lcMsgEl());
+}
+
+async function reloadMe() { const { user } = await api("/api/me"); S.me = { ...S.me, ...user }; }
+
+async function linkLc(e) {
+  e.preventDefault();
+  const btn = e.target.querySelector("button"); btn.disabled = true; lcMsg("Checking LeetCode…", true);
+  try {
+    const r = await api("/api/me/leetcode", { method: "PUT", body: { username: $("lcName").value } });
+    await reloadMe(); await refresh(); renderLc(); lcMsg(`Linked @${r.leetcode}. ${addedText(r.added)}`, true);
+  } catch (err) { btn.disabled = false; lcMsg(err.message); }
+}
+
+async function syncLc() {
+  $("lcSync").disabled = true; lcMsg("Syncing…", true);
+  try { const r = await api("/api/me/leetcode/sync", { method: "POST" }); await reloadMe(); await refresh(); renderLc(); lcMsg(addedText(r.added), true); }
+  catch (err) { await reloadMe().catch(() => {}); renderLc(); lcMsg(err.message); }
+}
+
+async function unlinkLc() {
+  if (!confirm("Unlink your LeetCode account? Existing ticks stay.")) return;
+  try { await api("/api/me/leetcode", { method: "DELETE" }); await reloadMe(); await refresh(); renderLc(); }
+  catch (err) { lcMsg(err.message); }
+}
+
+$("mLc").addEventListener("click", async () => {
+  closeMenu(); renderLc(); $("lcDlg").showModal();
+  try { await reloadMe(); renderLc(); } catch {}
+});
 
 $("mMembers").addEventListener("click", async () => {
   closeMenu(); memMsg(""); $("memDlg").showModal();

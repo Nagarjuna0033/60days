@@ -1,5 +1,6 @@
 import crypto from "node:crypto";
 import { q, dbUrl, dbEnvNames } from "../lib/db.js";
+import { findLeetcodeUser, syncUser, setCell, validLeetcodeName } from "../lib/leetcode.js";
 import { currentUser, login, sessionCookie, clearCookie, ensureAdmin, hashPin, nameKey, validPin } from "../lib/auth.js";
 
 const TOTAL_DAYS = 60;
@@ -91,23 +92,30 @@ async function handle(req, res) {
 
   if (path === "/api/state" && method === "GET") {
     const [users, solves, sols, comments] = await Promise.all([
-      q("SELECT id, name FROM users ORDER BY id"),
-      q("SELECT user_id, days FROM solves"),
+      q("SELECT id, name, leetcode FROM users ORDER BY id"),
+      q("SELECT user_id, days, auto FROM solves"),
       q("SELECT day, data FROM solutions"),
       q("SELECT id, user_id, d, p, t, at FROM comments ORDER BY at"),
     ]);
     return send(res, 200, {
       me,
       users: Object.fromEntries(users.map(u => [u.id, u.name])),
+      leetcode: Object.fromEntries(users.filter(u => u.leetcode).map(u => [u.id, u.leetcode])),
       solves: Object.fromEntries(solves.map(s => [s.user_id, s.days])),
+      auto: Object.fromEntries(solves.map(s => [s.user_id, s.auto || {}])),
       solutions: Object.fromEntries(sols.map(s => [s.day, s.data])),
       comments,
     });
   }
 
   if (path === "/api/solves" && method === "PUT") {
-    const { days } = await readBody(req);
-    const clean = cleanDays(days);
+    const body = await readBody(req);
+    if (body.day !== undefined) {
+      if (!validDay(body.day) || ![0, 1, 2].includes(body.idx)) return send(res, 400, { error: "Bad tick." });
+      await setCell("days", me.id, body.day, body.idx, body.value === true);
+      return send(res, 200, { ok: true });
+    }
+    const clean = cleanDays(body.days);
     await q("INSERT INTO solves (user_id, days) VALUES ($1, $2) ON CONFLICT (user_id) DO UPDATE SET days = $2", [me.id, JSON.stringify(clean)]);
     return send(res, 200, { ok: true });
   }
@@ -135,11 +143,40 @@ async function handle(req, res) {
     return send(res, 200, { ok: true });
   }
 
+  if (path === "/api/me/leetcode" && method === "PUT") {
+    const raw = String((await readBody(req)).username || "").trim().replace(/^@/, "").replace(/^https?:\/\/leetcode\.com\/(u\/)?/i, "").replace(/\/+$/, "");
+    if (!validLeetcodeName(raw)) return send(res, 400, { error: "Enter your LeetCode username." });
+    let found;
+    try { found = await findLeetcodeUser(raw); } catch { return send(res, 502, { error: "Couldn't reach LeetCode. Try again in a minute." }); }
+    if (!found) return send(res, 404, { error: "No LeetCode user with that name." });
+    const [taken] = await q("SELECT id FROM users WHERE lower(leetcode) = lower($1) AND id <> $2", [found, me.id]);
+    if (taken) return send(res, 409, { error: "Someone in the group already linked that LeetCode account." });
+    await q("UPDATE users SET leetcode = $1, lc_status = NULL, lc_last_sync = 0, lc_manual_at = $2 WHERE id = $3", [found, Date.now(), me.id]);
+    let added = 0;
+    try { ({ added } = await syncUser(me.id)); } catch {}
+    return send(res, 200, { ok: true, leetcode: found, added });
+  }
+
+  if (path === "/api/me/leetcode" && method === "DELETE") {
+    await q("UPDATE users SET leetcode = NULL, lc_status = NULL WHERE id = $1", [me.id]);
+    return send(res, 200, { ok: true });
+  }
+
+  if (path === "/api/me/leetcode/sync" && method === "POST") {
+    const [u] = await q("SELECT leetcode, lc_manual_at FROM users WHERE id = $1", [me.id]);
+    if (!u || !u.leetcode) return send(res, 400, { error: "Link your LeetCode account first." });
+    const wait = Number(u.lc_manual_at) + 60000 - Date.now();
+    if (wait > 0) return send(res, 429, { error: `Synced just now. Try again in ${Math.ceil(wait / 1000)}s.` });
+    await q("UPDATE users SET lc_manual_at = $1 WHERE id = $2", [Date.now(), me.id]);
+    try { return send(res, 200, { ok: true, ...(await syncUser(me.id)) }); }
+    catch { return send(res, 502, { error: "Couldn't reach LeetCode. Try again in a minute." }); }
+  }
+
   if (path.startsWith("/api/admin/")) {
     if (!me.is_admin) return send(res, 403, { error: "Admins only." });
 
     if (path === "/api/admin/users" && method === "GET") {
-      const rows = await q("SELECT id, name, is_admin, created_at FROM users ORDER BY id");
+      const rows = await q("SELECT id, name, is_admin, leetcode, created_at FROM users ORDER BY id");
       return send(res, 200, { users: rows });
     }
     if (path === "/api/admin/users" && method === "POST") {
@@ -150,6 +187,11 @@ async function handle(req, res) {
       const [exists] = await q("SELECT id FROM users WHERE name_key = $1", [nameKey(clean)]);
       if (exists) return send(res, 409, { error: "That name is already taken." });
       await q("INSERT INTO users (name, name_key, pin_hash, is_admin, created_at) VALUES ($1, $2, $3, FALSE, $4)", [clean, nameKey(clean), await hashPin(pin), Date.now()]);
+      return send(res, 200, { ok: true });
+    }
+    const lcMatch = path.match(/^\/api\/admin\/users\/(\d+)\/leetcode$/);
+    if (lcMatch && method === "DELETE") {
+      await q("UPDATE users SET leetcode = NULL, lc_status = NULL WHERE id = $1", [Number(lcMatch[1])]);
       return send(res, 200, { ok: true });
     }
     const uMatch = path.match(/^\/api\/admin\/users\/(\d+)(\/pin)?$/);

@@ -2,6 +2,7 @@ import http from "node:http";
 import fs from "node:fs/promises";
 import path from "node:path";
 import handler from "./api/index.js";
+import { startLeetcodePoller } from "./lib/leetcode.js";
 
 const PORT = Number(process.env.PORT || 3000);
 const PUBLIC = path.join(path.dirname(new URL(import.meta.url).pathname), "public");
@@ -19,4 +20,7 @@ http.createServer(async (req, res) => {
   } catch {
     res.statusCode = 404; res.end("Not found");
   }
-}).listen(PORT, () => console.log(`60 Day Prep dev server on http://localhost:${PORT}`));
+}).listen(PORT, () => {
+  console.log(`60 Day Prep dev server on http://localhost:${PORT}`);
+  startLeetcodePoller();
+});
