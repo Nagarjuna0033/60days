@@ -83,7 +83,7 @@ h1 small { color: var(--faint); font-size: 18px; font-weight: 700; }
 .pbody { margin-left: 50px; }
 @media (max-width: 520px) { .pbody { margin-left: 0; } }
 .hint { margin: 6px 0 0; color: var(--muted); font-size: 14px; }
-.links { display: flex; gap: 8px; margin-top: 10px; flex-wrap: wrap; }
+.links { display: flex; gap: 8px; margin-top: 8px; flex-wrap: wrap; }
 .pill-btn { border: 1px solid var(--line); background: var(--card); border-radius: 999px; padding: 4px 12px; font-size: 13px; font-weight: 600; color: var(--muted); }
 .pill-btn:hover { border-color: #cbd5e1; color: var(--fg); }
 .pill-btn[aria-expanded="true"] { background: var(--blue-soft); border-color: transparent; color: var(--blue-ink); }
@@ -355,10 +355,12 @@ function renderDay() {
     const row = el("div", { class: "prow" }, tick, el("div", { class: "pos", "aria-hidden": "true" }, POS[i]),
       el("div", { class: "ptitle" }, el("a", { href: p.url, target: "_blank", rel: "noopener" }, p.title), el("span", { class: "lc" }, "LC " + p.number)),
       el("span", { class: "diff d-" + p.difficulty }, `${DIFF[p.difficulty]} ${p.difficulty}`));
-    const body = el("div", { class: "pbody" }, el("p", { class: "hint" }, "💡 " + p.hint));
+    const body = el("div", { class: "pbody" });
     body.append(el("div", { class: "links" },
+      el("button", { class: "pill-btn", "aria-expanded": S.open[key] === "hint" ? "true" : "false", onclick: () => { S.open[key] = S.open[key] === "hint" ? null : "hint"; renderDay(); } }, S.open[key] === "hint" ? "Hide hint" : "💡 Show hint"),
       el("button", { class: "pill-btn", "aria-expanded": S.open[key] === "sol" ? "true" : "false", onclick: () => { S.open[key] = S.open[key] === "sol" ? null : "sol"; renderDay(); } }, sol ? "Solution" : "Solution 🔒"),
       el("button", { class: "pill-btn", "aria-expanded": S.open[key] === "dis" ? "true" : "false", onclick: () => { S.open[key] = S.open[key] === "dis" ? null : "dis"; renderDay(); } }, `Discussion · ${cs.length}`)));
+    if (S.open[key] === "hint") body.append(el("div", { class: "sub" }, el("p", { class: "hint", style: "margin:0" }, "💡 " + p.hint)));
     if (S.open[key] === "sol") body.append(solutionView(sol, i, d.day));
     if (S.open[key] === "dis") body.append(discussionView(key, on, cs));
     box.append(el("div", { class: "prob" + (on ? " solved" : "") }, row, body));
