@@ -1,1 +1,28 @@
-{}
+{
+  "1": {
+    "day": 1,
+    "items": [
+      {
+        "approach": "Walk the array once while keeping a hash map from value to index. For each number, check whether its complement (target - num) has already been seen; if so, return both indices. Otherwise record the current number and continue. This avoids the O(n^2) pair check.",
+        "time": "O(n)",
+        "space": "O(n)",
+        "code": "class Solution {\n    fun twoSum(nums: IntArray, target: Int): IntArray {\n        val seen = HashMap<Int, Int>()\n        for ((i, num) in nums.withIndex()) {\n            seen[target - num]?.let { return intArrayOf(it, i) }\n            seen[num] = i\n        }\n        return intArrayOf()\n    }\n}",
+        "gotcha": "Insert the current number only after checking for its complement, or you may pair an element with itself (e.g. target 6 with a single 3)."
+      },
+      {
+        "approach": "Add each number to a hash set. If an insertion fails because the value is already present, a duplicate exists and you can return true immediately. If the loop finishes, every value was distinct.",
+        "time": "O(n)",
+        "space": "O(n)",
+        "code": "class Solution {\n    fun containsDuplicate(nums: IntArray): Boolean {\n        val seen = HashSet<Int>()\n        for (num in nums) {\n            if (!seen.add(num)) return true\n        }\n        return false\n    }\n}",
+        "gotcha": "Sorting also works in O(1) extra space but costs O(n log n) and mutates the input, so mention the trade-off rather than defaulting to it."
+      },
+      {
+        "approach": "All anagrams share the same multiset of letters, so build a canonical key from each word and group words by that key in a hash map. Counting the 26 lowercase letters gives a key in O(k) per word, faster than sorting each word. Return the map's values as the groups.",
+        "time": "O(n * k)",
+        "space": "O(n * k)",
+        "code": "class Solution {\n    fun groupAnagrams(strs: Array<String>): List<List<String>> {\n        val groups = HashMap<String, MutableList<String>>()\n        for (s in strs) {\n            val count = IntArray(26)\n            for (c in s) count[c - 'a']++\n            groups.getOrPut(count.joinToString(\"#\")) { mutableListOf() }.add(s)\n        }\n        return groups.values.toList()\n    }\n}",
+        "gotcha": "An IntArray can't be a map key directly (it uses identity equality), so convert the counts to a String or List with separators so that counts like 1,11 and 11,1 don't collide."
+      }
+    ]
+  }
+}
