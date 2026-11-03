@@ -24,5 +24,109 @@
         "gotcha": "An IntArray can't be a map key directly (it uses identity equality), so convert the counts to a String or List with separators so that counts like 1,11 and 11,1 don't collide."
       }
     ]
+  },
+  "2": {
+    "day": 2,
+    "items": [
+      {
+        "approach": "Two strings are anagrams exactly when every letter appears the same number of times in each. Use a 26-slot count array: increment for characters of s and decrement for characters of t. If every slot ends at zero, they are anagrams. Bail out early if the lengths differ.",
+        "time": "O(n)",
+        "space": "O(1)",
+        "code": "class Solution {\n    fun isAnagram(s: String, t: String): Boolean {\n        if (s.length != t.length) return false\n        val count = IntArray(26)\n        for (i in s.indices) {\n            count[s[i] - 'a']++\n            count[t[i] - 'a']--\n        }\n        return count.all { it == 0 }\n    }\n}",
+        "gotcha": "Forgetting the length check lets strings like \"a\" and \"ab\" slip through if you only iterate over one of them."
+      },
+      {
+        "approach": "Count frequencies with a hash map, then bucket the numbers by frequency: bucket[f] holds every number that appears f times. A frequency can be at most n, so there are n+1 buckets. Walk the buckets from highest frequency down, collecting numbers until you have k. This beats sorting by frequency.",
+        "time": "O(n)",
+        "space": "O(n)",
+        "code": "class Solution {\n    fun topKFrequent(nums: IntArray, k: Int): IntArray {\n        val freq = HashMap<Int, Int>()\n        for (n in nums) freq[n] = (freq[n] ?: 0) + 1\n        val buckets = Array(nums.size + 1) { mutableListOf<Int>() }\n        for ((num, f) in freq) buckets[f].add(num)\n        val result = IntArray(k)\n        var idx = 0\n        for (f in nums.size downTo 1) {\n            for (num in buckets[f]) {\n                if (idx == k) return result\n                result[idx++] = num\n            }\n        }\n        return result\n    }\n}",
+        "gotcha": "Sizing the bucket array as n instead of n+1 crashes when every element is the same value (frequency n)."
+      },
+      {
+        "approach": "The answer at i is the product of everything to its left times everything to its right. First fill the output with prefix products in a left-to-right pass, then sweep right-to-left with a running suffix product and multiply it in. No division is needed, so zeros are handled naturally.",
+        "time": "O(n)",
+        "space": "O(1)",
+        "code": "class Solution {\n    fun productExceptSelf(nums: IntArray): IntArray {\n        val n = nums.size\n        val result = IntArray(n)\n        result[0] = 1\n        for (i in 1 until n) result[i] = result[i - 1] * nums[i - 1]\n        var suffix = 1\n        for (i in n - 1 downTo 0) {\n            result[i] *= suffix\n            suffix *= nums[i]\n        }\n        return result\n    }\n}",
+        "gotcha": "Using total product divided by nums[i] breaks when the array contains a zero (and division is disallowed anyway)."
+      }
+    ]
+  },
+  "3": {
+    "day": 3,
+    "items": [
+      {
+        "approach": "Scan prices once, tracking the lowest price seen so far. At each day, the best sale today is price minus that minimum; keep the maximum of these. Buying must happen before selling, which the single left-to-right pass guarantees.",
+        "time": "O(n)",
+        "space": "O(1)",
+        "code": "class Solution {\n    fun maxProfit(prices: IntArray): Int {\n        var minPrice = Int.MAX_VALUE\n        var best = 0\n        for (p in prices) {\n            if (p < minPrice) minPrice = p\n            else if (p - minPrice > best) best = p - minPrice\n        }\n        return best\n    }\n}",
+        "gotcha": "Taking global max minus global min ignores ordering; if the max comes before the min the answer should be 0, not negative or wrong."
+      },
+      {
+        "approach": "Put every number in a hash set. A number starts a sequence only if num - 1 is not in the set; from each such start, count upward while num + 1 exists. Each element is visited by at most one upward walk, so the total work is linear.",
+        "time": "O(n)",
+        "space": "O(n)",
+        "code": "class Solution {\n    fun longestConsecutive(nums: IntArray): Int {\n        val set = nums.toHashSet()\n        var best = 0\n        for (num in set) {\n            if (num - 1 in set) continue\n            var len = 1\n            while (num + len in set) len++\n            if (len > best) best = len\n        }\n        return best\n    }\n}",
+        "gotcha": "Starting a walk from every number (not just sequence starts) degrades to O(n^2), and iterating the raw array instead of the set repeats work for duplicates."
+      },
+      {
+        "approach": "Validate each filled cell against three constraints at once: its row, its column and its 3x3 box. Keep a seen-flag table for each of the 9 rows, 9 columns and 9 boxes, with box index (r / 3) * 3 + c / 3. If a digit is already flagged in any of the three, the board is invalid. The board is fixed at 9x9, so this is constant work.",
+        "time": "O(1)",
+        "space": "O(1)",
+        "code": "class Solution {\n    fun isValidSudoku(board: Array<CharArray>): Boolean {\n        val rows = Array(9) { BooleanArray(9) }\n        val cols = Array(9) { BooleanArray(9) }\n        val boxes = Array(9) { BooleanArray(9) }\n        for (r in 0 until 9) {\n            for (c in 0 until 9) {\n                val ch = board[r][c]\n                if (ch == '.') continue\n                val d = ch - '1'\n                val b = (r / 3) * 3 + c / 3\n                if (rows[r][d] || cols[c][d] || boxes[b][d]) return false\n                rows[r][d] = true\n                cols[c][d] = true\n                boxes[b][d] = true\n            }\n        }\n        return true\n    }\n}",
+        "gotcha": "The task only checks the filled cells for rule violations; it does not ask whether the puzzle is solvable, so don't try to solve it."
+      }
+    ]
+  },
+  "4": {
+    "day": 4,
+    "items": [
+      {
+        "approach": "Precompute a prefix-sum array where prefix[i] is the sum of the first i elements. Any range sum left..right is then prefix[right + 1] - prefix[left], answered in constant time. Using one extra leading zero avoids special-casing left = 0.",
+        "time": "O(n) build, O(1) per query",
+        "space": "O(n)",
+        "code": "class NumArray(nums: IntArray) {\n    private val prefix = IntArray(nums.size + 1)\n\n    init {\n        for (i in nums.indices) prefix[i + 1] = prefix[i] + nums[i]\n    }\n\n    fun sumRange(left: Int, right: Int): Int = prefix[right + 1] - prefix[left]\n}",
+        "gotcha": "Off-by-one: with a size n+1 prefix array the answer is prefix[right + 1] - prefix[left], not prefix[right] - prefix[left]."
+      },
+      {
+        "approach": "A subarray i..j sums to k when prefix[j] - prefix[i-1] = k, i.e. some earlier prefix equals current - k. Keep a running prefix sum and a map counting how many times each prefix value has occurred, seeded with {0: 1} for subarrays starting at index 0. Add map[current - k] to the answer at each step. Negative numbers rule out a sliding window, which is why this hash approach is needed.",
+        "time": "O(n)",
+        "space": "O(n)",
+        "code": "class Solution {\n    fun subarraySum(nums: IntArray, k: Int): Int {\n        val count = HashMap<Int, Int>()\n        count[0] = 1\n        var sum = 0\n        var result = 0\n        for (n in nums) {\n            sum += n\n            result += count[sum - k] ?: 0\n            count[sum] = (count[sum] ?: 0) + 1\n        }\n        return result\n    }\n}",
+        "gotcha": "Forgetting to seed the map with prefix 0 -> 1 misses every valid subarray that starts at index 0."
+      },
+      {
+        "approach": "If two prefix sums have the same remainder mod k, the subarray between them sums to a multiple of k. Store the first index where each remainder appears, seeded with remainder 0 at index -1. When a remainder repeats and the distance from its first index is at least 2, return true. Keeping only the earliest index maximizes the length.",
+        "time": "O(n)",
+        "space": "O(min(n, k))",
+        "code": "class Solution {\n    fun checkSubarraySum(nums: IntArray, k: Int): Boolean {\n        val firstIndex = HashMap<Int, Int>()\n        firstIndex[0] = -1\n        var rem = 0\n        for (i in nums.indices) {\n            rem = (rem + nums[i]) % k\n            val prev = firstIndex[rem]\n            if (prev == null) firstIndex[rem] = i\n            else if (i - prev >= 2) return true\n        }\n        return false\n    }\n}",
+        "gotcha": "Overwriting the stored index on each repeat (instead of keeping the first) can make a valid length-2+ subarray look too short, e.g. [0, 0] with any k."
+      }
+    ]
+  },
+  "5": {
+    "day": 5,
+    "items": [
+      {
+        "approach": "Boyer-Moore voting: keep a candidate and a counter. When the counter is zero, adopt the current element as candidate; then add one if the element matches the candidate and subtract one otherwise. Because the majority appears more than n/2 times, it cannot be fully cancelled and survives as the final candidate.",
+        "time": "O(n)",
+        "space": "O(1)",
+        "code": "class Solution {\n    fun majorityElement(nums: IntArray): Int {\n        var candidate = 0\n        var count = 0\n        for (n in nums) {\n            if (count == 0) candidate = n\n            count += if (n == candidate) 1 else -1\n        }\n        return candidate\n    }\n}",
+        "gotcha": "The vote only works because a majority is guaranteed; without that guarantee you'd need a second pass to verify the candidate."
+      },
+      {
+        "approach": "Dutch National Flag partitioning with three pointers: everything before low is 0, everything after high is 2, and mid scans the unknown middle. A 0 is swapped to low (advance both low and mid), a 2 is swapped to high (shrink high but do not advance mid), and a 1 just advances mid. One pass sorts the array in place.",
+        "time": "O(n)",
+        "space": "O(1)",
+        "code": "class Solution {\n    fun sortColors(nums: IntArray) {\n        var low = 0\n        var mid = 0\n        var high = nums.size - 1\n        while (mid <= high) {\n            when (nums[mid]) {\n                0 -> { swap(nums, low++, mid++) }\n                2 -> { swap(nums, mid, high--) }\n                else -> mid++\n            }\n        }\n    }\n\n    private fun swap(a: IntArray, i: Int, j: Int) {\n        val t = a[i]; a[i] = a[j]; a[j] = t\n    }\n}",
+        "gotcha": "Advancing mid after swapping with high is a bug: the element just swapped in from the end hasn't been examined yet."
+      },
+      {
+        "approach": "Kadane's algorithm: at each index, the best subarray ending here either extends the previous best ending or starts fresh at this element, so current = max(num, current + num). Track the overall maximum of current across the array. Starting from the first element handles all-negative arrays correctly.",
+        "time": "O(n)",
+        "space": "O(1)",
+        "code": "class Solution {\n    fun maxSubArray(nums: IntArray): Int {\n        var current = nums[0]\n        var best = nums[0]\n        for (i in 1 until nums.size) {\n            current = maxOf(nums[i], current + nums[i])\n            best = maxOf(best, current)\n        }\n        return best\n    }\n}",
+        "gotcha": "Initializing best to 0 returns 0 for an all-negative array like [-3, -1], but the answer must be -1 since the subarray can't be empty."
+      }
+    ]
   }
 }
