@@ -1,0 +1,101 @@
+name: Deploy
+
+on:
+  push:
+    branches: [main]
+  workflow_dispatch:
+
+concurrency:
+  group: deploy
+  cancel-in-progress: false
+
+env:
+  HOST: 129.225.66.124
+  HOST_KEY: "129.225.66.124 ssh-ed25519 AAAAC3NzaC1lZDI1NTE5AAAAICcnq9h6TzCHydr1s1VMMe9AGWn9D++br5MbuDB0G4l6"
+  APP_DIR: /opt/prep60
+  SITE: http://129.225.66.124:8080
+
+jobs:
+  check:
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v4
+      - uses: actions/setup-node@v4
+        with:
+          node-version: 20
+          cache: npm
+      - run: npm ci
+      - name: Syntax check
+        run: for f in api/*.js lib/*.js dev.js; do node --check "$f"; done
+      - name: Validate JSON
+        run: node -e 'for (const f of ["public/bank.json", "public/solutions.json"]) JSON.parse(require("fs").readFileSync(f, "utf8"))'
+      - name: Smoke test
+        run: |
+          LEETCODE_POLL=off PORT=3000 node dev.js &
+          for i in $(seq 1 20); do curl -fs http://localhost:3000/api/health && break; sleep 1; done
+          test "$(curl -s -o /dev/null -w '%{http_code}' http://localhost:3000/)" = 200
+          test "$(curl -s -o /dev/null -w '%{http_code}' http://localhost:3000/api/me)" = 401
+
+  deploy:
+    needs: check
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v4
+        with:
+          fetch-depth: 0
+      - name: Skip if the deploy key isn't set
+        id: key
+        env:
+          KEY: ${{ secrets.DEPLOY_SSH_KEY }}
+        run: |
+          if [ -z "$KEY" ]; then echo "::warning::DEPLOY_SSH_KEY secret is not set, skipping deploy"; echo "ok=false" >> "$GITHUB_OUTPUT"; else echo "ok=true" >> "$GITHUB_OUTPUT"; fi
+      - uses: actions/setup-node@v4
+        if: steps.key.outputs.ok == 'true'
+        with:
+          node-version: 20
+          cache: npm
+      - name: Install dependencies
+        if: steps.key.outputs.ok == 'true'
+        run: npm ci
+      - name: Decide whether to restart
+        if: steps.key.outputs.ok == 'true'
+        id: changes
+        run: |
+          BEFORE="${{ github.event.before }}"
+          if [ -z "$BEFORE" ] || [ "$BEFORE" = "0000000000000000000000000000000000000000" ] || ! git cat-file -e "$BEFORE" 2>/dev/null; then
+            echo "restart=true" >> "$GITHUB_OUTPUT"; exit 0
+          fi
+          if git diff --name-only "$BEFORE" "${{ github.sha }}" | grep -qvE '^public/'; then
+            echo "restart=true" >> "$GITHUB_OUTPUT"
+          else
+            echo "restart=false" >> "$GITHUB_OUTPUT"
+          fi
+      - name: Set up SSH
+        if: steps.key.outputs.ok == 'true'
+        env:
+          KEY: ${{ secrets.DEPLOY_SSH_KEY }}
+        run: |
+          mkdir -p ~/.ssh && chmod 700 ~/.ssh
+          printf '%s\n' "$KEY" > ~/.ssh/deploy_key && chmod 600 ~/.ssh/deploy_key
+          echo "$HOST_KEY" > ~/.ssh/known_hosts
+      - name: Copy files to the server
+        if: steps.key.outputs.ok == 'true'
+        run: |
+          tar czf - package.json package-lock.json dev.js api lib public node_modules \
+            | ssh -i ~/.ssh/deploy_key -o StrictHostKeyChecking=yes opc@"$HOST" \
+              "sudo tar xzf - -C $APP_DIR --no-same-owner && sudo chown -R --reference=$APP_DIR $APP_DIR"
+      - name: Restart the app
+        if: steps.key.outputs.ok == 'true' && steps.changes.outputs.restart == 'true'
+        run: ssh -i ~/.ssh/deploy_key -o StrictHostKeyChecking=yes opc@"$HOST" "sudo systemctl restart prep60"
+      - name: Check the site is up
+        if: steps.key.outputs.ok == 'true'
+        run: |
+          for i in $(seq 1 30); do
+            if [ "$(curl -s -o /dev/null -w '%{http_code}' "$SITE/api/me")" = 401 ]; then echo "Site is up"; exit 0; fi
+            sleep 2
+          done
+          ssh -i ~/.ssh/deploy_key opc@"$HOST" "sudo systemctl status prep60 --no-pager | tail -20" || true
+          exit 1
+      - name: Clean up
+        if: always()
+        run: rm -f ~/.ssh/deploy_key
