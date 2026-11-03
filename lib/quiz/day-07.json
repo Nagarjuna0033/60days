@@ -146,7 +146,7 @@
       "question": "In this extension, what does `view` refer to?",
       "code": "fun Fragment.hideKeyboard() {\n    val imm = requireContext().getSystemService(InputMethodManager::class.java)\n    imm.hideSoftInputFromWindow(view?.windowToken, 0)\n}",
       "options": [
-        "The Fragment's own `view` property, accessed through the implicit `this` receiver",
+        "The Fragment's own `view`, via the implicit `this` receiver",
         "A parameter that the caller has to pass in",
         "The host Activity's root view",
         "Nothing, because extensions can't access properties of their receiver"
@@ -202,9 +202,9 @@
       "question": "Why doesn't this compile?",
       "code": "val String.lastChar: Char = this[length - 1]\n\nfun main() {\n    println(\"abc\".lastChar)\n}",
       "options": [
-        "Extension properties have no backing field, so they can't have an initializer and need a getter",
+        "Extension properties have no backing field, so they can't have an initializer",
         "Extension properties must be declared with `var`",
-        "`this` can only be used inside extension functions, not properties",
+        "`this` can only be used inside extension functions, not in extension property initializers",
         "`Char` isn't allowed as the type of an extension property"
       ],
       "answer": [

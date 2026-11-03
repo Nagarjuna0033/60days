@@ -28,7 +28,7 @@
       "question": "Which statement about these two declarations is true?",
       "code": "fun a(x: Int) = x * 2\n\nfun b(x: Int) {\n    return x * 2\n}",
       "options": [
-        "`a` returns `Int`, and `b` does not compile because a block body without a declared return type returns `Unit`",
+        "`a` returns `Int`, and `b` fails because a block body defaults to `Unit`",
         "Both compile and both return `Int`",
         "`a` does not compile because single-expression functions need an explicit return type",
         "Both compile, but `b` returns `Any`"
@@ -164,7 +164,7 @@
       "difficulty": "Medium",
       "question": "Why do custom Views often declare `class ChartView @JvmOverloads constructor(context: Context, attrs: AttributeSet? = null, defStyleAttr: Int = 0) : View(context, attrs, defStyleAttr)`?",
       "options": [
-        "It generates the Java constructors `(Context)`, `(Context, AttributeSet)` and `(Context, AttributeSet, int)`, and the layout inflater calls the two-argument one by reflection",
+        "It emits `(Context)` and `(Context, AttributeSet)` Java overloads, which layout inflation calls",
         "It makes Kotlin callers able to omit `attrs` and `defStyleAttr`, which they otherwise couldn't",
         "It generates one Java constructor per possible combination of parameters, including `(Context, int)`",
         "It is required for any Kotlin class that extends a Java class"
@@ -291,7 +291,7 @@
       "code": "tailrec fun sum(n: Int): Int =\n    if (n == 0) 0 else n + sum(n - 1)\n\nfun main() {\n    println(sum(10))\n}",
       "compiles": true,
       "options": [
-        "It compiles with a warning that no tail calls are found, and the recursion is not turned into a loop",
+        "It compiles with a warning, and the recursion is not turned into a loop",
         "It compiles and the compiler turns the recursion into a loop",
         "It fails to compile because the recursive call is not in tail position",
         "It compiles, but `tailrec` makes it throw at runtime because the call isn't a tail call"
@@ -324,9 +324,9 @@
       "question": "Why can `id` be declared as a non-null `String` here?",
       "code": "fun fail(msg: String): Nothing =\n    throw IllegalStateException(msg)\n\nval id: String = intent.getStringExtra(\"id\") ?: fail(\"missing id\")",
       "options": [
-        "`Nothing` is a subtype of every type and `fail` never returns, so the whole expression has type `String`",
+        "`fail` returns `Nothing`, a subtype of every type, so the expression is `String`",
         "`Nothing` is an alias for `Unit`, and `Unit` is converted to an empty string",
-        "The compiler inserts `!!` on `getStringExtra` because the right side throws",
+        "The compiler inserts `!!` on `getStringExtra` because the right side of `?:` always throws",
         "It can't. `id` must be `String?` because `fail` might return null"
       ],
       "answer": [

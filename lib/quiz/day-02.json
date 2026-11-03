@@ -175,7 +175,7 @@
       "difficulty": "Medium",
       "question": "Which statement about `List<Int?>` and `List<Int>?` is correct?",
       "options": [
-        "`List<Int?>` is never null itself, but its elements may be null",
+        "`List<Int?>` can't be null itself, but its elements can",
         "`List<Int>?` is a list whose elements may be null",
         "The two types are interchangeable",
         "`List<Int?>` may be null itself, but its elements may not"
