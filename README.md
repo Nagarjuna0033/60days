@@ -1,6 +1,6 @@
 # 60 Day Prep
 
-A small web app for a study group working through **180 LeetCode problems in 60 days** (3 a day) to prepare for SDE-2 interviews.
+A small web app for a study group working through **180 LeetCode problems in 60 days** (3 a day).
 
 **Live:** http://129.225.66.124:8080
 
@@ -74,7 +74,6 @@ All optional. Set them as environment variables.
 | `COOKIE_SECURE` | Set when serving over HTTPS to mark cookies `Secure` |
 | `LEETCODE_POLL=off` | Turn off the 10-minute LeetCode poller |
 | `ADMIN_NAME`, `ADMIN_PIN` | Create a first admin account when the database is empty |
-| `SOLUTIONS_TOKEN` | Bearer token for the `PUT /api/solutions/:day` endpoint |
 
 ## Deployment
 
@@ -87,25 +86,3 @@ The app runs on an Oracle Cloud Always Free VM as the `prep60` systemd service, 
 4. **Health check:** confirm the site responds.
 
 The deploy needs the `DEPLOY_SSH_KEY` repository secret.
-
-## API
-
-All routes are under `/api` and use JSON. Everything except sign-up, login and health needs the session cookie.
-
-| Method | Route | Description |
-|---|---|---|
-| POST | `/signup`, `/login`, `/logout` | Accounts |
-| GET | `/me` | Current user |
-| PUT | `/me/pin` | Change your PIN |
-| GET | `/state` | Users, ticks, solutions and comments for the dashboard |
-| PUT | `/me/leetcode` | Link a LeetCode username (validated against LeetCode) |
-| DELETE | `/me/leetcode` | Unlink your LeetCode account |
-| POST | `/me/leetcode/sync` | Sync now (once a minute) |
-| POST | `/comments` | Post a comment on a problem |
-| DELETE | `/comments/:id` | Delete your own comment (admins can delete any) |
-| GET/POST | `/admin/users` | List or add members (admin) |
-| PUT | `/admin/users/:id/pin` | Reset a member's PIN (admin) |
-| DELETE | `/admin/users/:id`, `/admin/users/:id/leetcode` | Remove a member or unlink their LeetCode (admin) |
-| GET | `/health` | Basic status |
-
-Ticks come only from LeetCode, so `PUT /solves` is disabled.
