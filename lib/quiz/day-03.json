@@ -117,8 +117,8 @@
       "question": "Why doesn't this compile?",
       "code": "class Box {\n    var s: String? = \"hi\"\n}\n\nfun main() {\n    val b = Box()\n    if (b.s != null) println(b.s.length)\n}",
       "options": [
-        "`s` is a mutable member property, so another thread could set it to null between the check and the use",
-        "Smart casts never work on class properties, only on local variables",
+        "`s` is a `var` member, so it could change between the check and the use",
+        "Smart casts never work on class properties, only on local variables, even for a `val`",
         "`!= null` checks can't produce smart casts. You need `is String`",
         "`Box` must be a data class for its properties to be smart cast"
       ],
@@ -246,7 +246,7 @@
       "question": "A Fragment uses this code in `onAttach`. What happens if the host Activity does NOT implement `MyListener`?",
       "code": "override fun onAttach(context: Context) {\n    super.onAttach(context)\n    listener = context as? MyListener\n        ?: throw IllegalStateException(\"$context must implement MyListener\")\n}",
       "options": [
-        "It throws IllegalStateException with the custom message as soon as the fragment attaches",
+        "It throws IllegalStateException with the custom message in `onAttach`",
         "It throws ClassCastException when `as?` fails",
         "`listener` is set to null, and the app crashes later when a callback is invoked",
         "It doesn't compile, because `throw` can't be used as the right side of `?:`"
@@ -301,7 +301,7 @@
       "question": "A Java method `public String getName()` has no nullability annotations and returns null at runtime. What happens in Kotlin?",
       "code": "val user = JavaUser()\nval a = user.getName()      // line 1\nval b: String = user.getName() // line 2",
       "options": [
-        "Line 1 succeeds with `a` typed as the platform type `String!`, and line 2 throws NullPointerException immediately",
+        "Line 1 types `a` as `String!`, and line 2 throws NPE right away",
         "Both lines fail to compile until you add `?` or `!!`",
         "Both lines succeed, and the crash happens only when `b.length` is called",
         "Line 1 is inferred as `String?`, and line 2 is a compile error"

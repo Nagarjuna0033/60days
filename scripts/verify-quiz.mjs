@@ -3,7 +3,8 @@
 //   "compiles": false:   code must fail to compile (the question is about a compile error).
 //   "compiles": true:    code must compile.
 // Usage: node scripts/verify-quiz.mjs [day ...]   (no args = every file in lib/quiz)
-// Needs kotlinc and kotlin on PATH.
+// Needs kotlinc and kotlin on PATH. kotlinx-coroutines is put on the classpath when found
+// (QUIZ_CLASSPATH, or the newest kotlinx-coroutines-core-jvm jar in ~/.gradle).
 import fs from "node:fs";
 import os from "node:os";
 import path from "node:path";
@@ -21,6 +22,19 @@ if (!files.length) { console.error("No quiz files matched."); process.exit(1); }
 
 const SYL = JSON.parse(fs.readFileSync(new URL("../public/quiz-syllabus.json", import.meta.url), "utf8"));
 const sylTopic = day => (SYL.days.find(d => d.day === day) || {}).topic;
+function findCoroutines() {
+  if (process.env.QUIZ_CLASSPATH) return process.env.QUIZ_CLASSPATH;
+  const root = path.join(os.homedir(), ".gradle/caches/modules-2/files-2.1/org.jetbrains.kotlinx/kotlinx-coroutines-core-jvm");
+  try {
+    const ver = fs.readdirSync(root).filter(v => /^\d+\.\d+(\.\d+)?$/.test(v)).sort((a, b) => a.localeCompare(b, undefined, { numeric: true })).pop();
+    for (const h of fs.readdirSync(path.join(root, ver))) {
+      const jar = path.join(root, ver, h, `kotlinx-coroutines-core-jvm-${ver}.jar`);
+      if (fs.existsSync(jar)) return jar;
+    }
+  } catch {}
+  return "";
+}
+const LIBS = findCoroutines();
 const errors = [];
 const err = (id, msg) => errors.push(`${id}: ${msg}`);
 const norm = s => String(s).replace(/\r/g, "").split("\n").map(l => l.trimEnd()).join("\n").trim();
@@ -70,7 +84,7 @@ const cls = q => `${pkg(q)}.${q.id[0].toUpperCase()}${q.id.slice(1)}Kt`;
 const write = (dir, q) => { fs.mkdirSync(dir, { recursive: true }); const p = path.join(dir, q.id + ".kt"); fs.writeFileSync(p, `package ${pkg(q)}\n\n${q.code}\n`); return p; };
 
 async function compile(srcs, out) {
-  try { await run("kotlinc", [...srcs, "-nowarn", "-d", out], { maxBuffer: 1 << 24 }); return { ok: true }; }
+  try { await run("kotlinc", [...srcs, "-nowarn", ...(LIBS ? ["-cp", LIBS] : []), "-d", out], { maxBuffer: 1 << 24 }); return { ok: true }; }
   catch (e) { return { ok: false, msg: String(e.stderr || e.message) }; }
 }
 
@@ -94,11 +108,17 @@ if (outputs.length) {
     });
     if (good.length) c = await compile(good.map(q => path.join(tmp, "out", q.id + ".kt")), jar);
   }
+  const cp = [jar, LIBS].filter(Boolean).join(path.delimiter);
+  const once = async q => {
+    try { return norm((await run("kotlin", ["-cp", cp, cls(q)], { timeout: 20000 })).stdout); }
+    catch (e) { return norm(String(e.stdout || "") + `\n<threw: ${String(e.stderr || "").split("\n")[0]}>`); }
+  };
   await pool(good, 6, async q => {
-    let out;
-    try { out = (await run("kotlin", ["-cp", jar, cls(q)], { timeout: 20000 })).stdout; }
-    catch (e) { out = String(e.stdout || "") + `\n<threw: ${String(e.stderr || "").split("\n")[0]}>`; }
-    const actual = norm(out), claimed = norm(q.options[q.answer[0]]);
+    // Run three times: concurrent code must print the same thing every time.
+    const runs = [await once(q), await once(q), await once(q)];
+    const actual = runs[0];
+    if (runs.some(r => r !== actual)) { err(q.id, "output is not deterministic across runs: " + JSON.stringify([...new Set(runs)])); return; }
+    const claimed = norm(q.options[q.answer[0]]);
     if (actual !== claimed) err(q.id, `claimed output ${JSON.stringify(claimed)} but it prints ${JSON.stringify(actual)}`);
     const dup = q.options.filter((o, i) => i !== q.answer[0] && norm(o) === actual);
     if (dup.length) err(q.id, "a wrong option matches the real output");

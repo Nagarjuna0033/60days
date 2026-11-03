@@ -28,10 +28,10 @@
       "question": "What happens when you compile this line?",
       "code": "val max = if (a > b) a",
       "options": [
-        "Compile error: `if` used as an expression must have an `else` branch",
+        "Compile error: an `if` expression needs an `else` branch",
         "It compiles and `max` is `Int?`, `null` when `a <= b`",
         "It compiles and `max` is `Unit` when `a <= b`",
-        "It compiles but throws at runtime when `a <= b`"
+        "It compiles but throws IllegalStateException at runtime when `a <= b`"
       ],
       "answer": [
         0
@@ -98,7 +98,7 @@
       "question": "In this Activity menu handler, why is the `else` branch required?",
       "code": "override fun onOptionsItemSelected(item: MenuItem): Boolean {\n    return when (item.itemId) {\n        R.id.action_search -> { openSearch(); true }\n        R.id.action_settings -> { openSettings(); true }\n        else -> super.onOptionsItemSelected(item)\n    }\n}",
       "options": [
-        "`when` is used as an expression on an `Int`, and an `Int` subject can't be exhaustive without `else`",
+        "`when` is an expression on an `Int`, and an `Int` subject can't be exhaustive without `else`",
         "`R.id` values aren't compile-time constants, and `when` needs `else` for non-constant branches",
         "Without `else` the matching branch would fall through into the next one",
         "Android Lint rejects any `when` without `else`"
@@ -171,7 +171,7 @@
       "options": [
         "Compile error: the `when` expression is not exhaustive",
         "It prints an empty line",
-        "It throws `NoWhenBranchMatchedException`",
+        "It throws `NoWhenBranchMatchedException` for `SYSTEM` at runtime",
         "It prints `null`"
       ],
       "answer": [
@@ -333,8 +333,8 @@
       "code": "fun main() {\n    val items = listOf(\"a\", \"b\", \"c\")\n    for (i in 0..items.size) print(items[i])\n}",
       "options": [
         "It prints `abc` then throws `IndexOutOfBoundsException`",
-        "It prints `abc`",
-        "It prints `ab`",
+        "It prints `abc`, because `0..items.size` stops at the last index",
+        "It prints `ab`, since `..` excludes the upper bound",
         "Compile error"
       ],
       "answer": [
