@@ -65,7 +65,7 @@ jobs:
           if [ -z "$BEFORE" ] || [ "$BEFORE" = "0000000000000000000000000000000000000000" ] || ! git cat-file -e "$BEFORE" 2>/dev/null; then
             echo "restart=true" >> "$GITHUB_OUTPUT"; exit 0
           fi
-          if git diff --name-only "$BEFORE" "${{ github.sha }}" | grep -qvE '^public/'; then
+          if git diff --name-only "$BEFORE" "${{ github.sha }}" | grep -qvE '^(public/|\.github/|[^/]+\.md$)'; then
             echo "restart=true" >> "$GITHUB_OUTPUT"
           else
             echo "restart=false" >> "$GITHUB_OUTPUT"
